@@ -92,9 +92,11 @@ func main() {
 
 	switch os.Args[1] {
 	case buildCommand.Name():
+		// Parse and execute 'build' subcommand
 		if errParse := buildCommand.Parse(os.Args[2:]); errParse != nil {
 			log.Fatalf("error parsing build flags: %v", errParse)
 		}
+		stackBuild(*buildBranch, *buildTargets)
 	case cancelCommand.Name():
 		if errParse := cancelCommand.Parse(os.Args[2:]); errParse != nil {
 			log.Fatalf("error parsing cancel flags: %v", errParse)
@@ -107,24 +109,6 @@ func main() {
 		fmt.Printf("'%v' is not a valid command.\n", os.Args[1])
 		flag.Usage()
 		os.Exit(1)
-	}
-
-	// Execute on 'build' subcommand
-	if buildCommand.Parsed() {
-		fmt.Printf("'branch': '%v'\n", *buildBranch)
-		fmt.Printf("'target': '%v'\n", *buildTargets)
-
-		buildCommand.Visit(func(f *flag.Flag) {
-			switch f.Name {
-			case "branch":
-				fmt.Printf("'branch': '%v'\n", *buildBranch)
-			case "target":
-				fmt.Printf("'target': '%v'\n", *buildTargets)
-			}
-		})
-
-		fmt.Printf("'branch': '%v'\n", *buildBranch)
-		fmt.Printf("'target': '%v'\n", *buildTargets)
 	}
 
 	// Execute on 'cancel' subcommand

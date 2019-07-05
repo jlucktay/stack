@@ -6,6 +6,8 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+
+	"github.com/jlucktay/stack/pkg/common"
 )
 
 const yeahNah = `
@@ -16,7 +18,7 @@ const yeahNah = `
 !  / ______|\___  >____  /___|  / \____|__  (____  /___|  /
 !  \/           \/     \/     \/          \/     \/     \/`
 
-func stackBuild(branch string) {
+func stackBuild(branch, targets string) {
 	// 0.1
 	unpushedRaw, errExec := exec.Command("git", "rev-list", "--count", "@{u}..").Output()
 	if errExec != nil {
@@ -32,10 +34,7 @@ func stackBuild(branch string) {
 	}
 
 	// 1
-	common.getPAT()
-	pat, errPat := common.getPAT()
-	common.getPAT()
-	common.getPAT()
+	pat, errPat := common.GetPAT()
 	if errPat != nil {
 		log.Fatal(errPat)
 	}
