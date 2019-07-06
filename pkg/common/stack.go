@@ -28,17 +28,26 @@ func GetStackPath(prefix, remote string) (string, error) {
 	return xwd[1], nil
 }
 
+// validateGitRemotes takes a string argument and searches for it in all remotes that the current git repository
+// fetches from. If the string is not found, an error is returned, otherwise nil.
 func validateGitRemotes(needle string) error {
 	remotes, errExec := exec.Command("git", "remote", "--verbose").Output()
 	if errExec != nil {
 		return errExec
 	}
 
+	found := false
+
 	for _, remote := range strings.Split(string(remotes), "\n") {
-		if strings.Contains(remote, "(fetch)") && !strings.Contains(remote, needle) {
-			return fmt.Errorf("current git repo does not fetch from '%s' as a remote", needle)
+		if strings.Contains(remote, "(fetch)") && strings.Contains(remote, needle) {
+			found = true
+			break
 		}
 	}
 
-	return nil
+	if found {
+		return nil
+	}
+
+	return fmt.Errorf("current git repo does not fetch from '%s' as a remote", needle)
 }
