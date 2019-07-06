@@ -119,8 +119,7 @@ func main() {
 			os.Exit(1)
 		}
 
-		cancelCommand.Visit(func(f *flag.Flag) {
-		})
+		cancelCommand.Visit(func(f *flag.Flag) {})
 	}
 
 	// Execute on 'issue' subcommand
@@ -131,7 +130,6 @@ func main() {
 			os.Exit(1)
 		}
 
-		issueCommand.Visit(func(f *flag.Flag) {
-		})
+		issueCommand.Visit(func(f *flag.Flag) {})
 	}
 }

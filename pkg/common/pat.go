@@ -35,11 +35,15 @@ func getPAT() (string, error) {
 // validatePAT makes sure that the given token matches the format of Azure DevOps
 func validatePAT(token string) (string, error) {
 	if len(token) == 0 {
-		return "", fmt.Errorf("the token has a length of zero")
+		return "", fmt.Errorf(
+			"the value for the 'pat' key in the '%s' file has a length of zero",
+			patPath)
 	}
 	rx := regexp.MustCompile("^[a-z0-9]{52}$")
 	if !rx.Match([]byte(token)) {
-		return "", fmt.Errorf("the 'pat' key in the '%s' file is not correctly formed", patPath)
+		return "", fmt.Errorf(
+			"the 'pat' key in the '%s' file is not correctly formed",
+			patPath)
 	}
 
 	return token, nil
