@@ -68,40 +68,6 @@ TODO
 - [Viper - Go configuration with fangs](https://github.com/spf13/viper)
 - [go-github - Go library for accessing the GitHub API](https://github.com/google/go-github)
 
-## `curl` request example
-
-``` shell
-$ curl --include --header "Authorization: token $GHPAT" https://api.github.com/repos/Dentsu-Aegis-Network-Global-Technology/dan-migration-factory/issues --data '{"title":"Hello world","body":"POSTed via API","labels":["apparea_prod/appstacks/nordic-jenkins","migration"]}'
-HTTP/1.1 201 Created
-Content-Type: application/json; charset=utf-8
-Location: https://api.github.com/repos/Dentsu-Aegis-Network-Global-Technology/dan-migration-factory/issues/116
-X-RateLimit-Limit: 5000
-X-RateLimit-Remaining: 4994
-X-RateLimit-Reset: 1562323709
-...
-
-{
-  "html_url": "https://github.com/Dentsu-Aegis-Network-Global-Technology/dan-migration-factory/issues/116",
-  "title": "Hello world",
-  "body": "POSTed via API",
-  "labels": [
-    {
-      "name": "apparea_prod/appstacks/nordic-jenkins",
-      ...
-    },
-    {
-      "name": "migration",
-      ...
-    }
-  ],
-  "user": {
-    "login": "jlucktay",
-    ...
-  }
-  ...
-}
-```
-
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
