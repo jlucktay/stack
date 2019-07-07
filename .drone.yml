@@ -16,6 +16,10 @@ steps:
         commands:
           - go test -race -v ./... -cover
 
+trigger:
+  event:
+  - pull_request
+
 # Save dependencies between steps
 volumes:
   - name: deps
