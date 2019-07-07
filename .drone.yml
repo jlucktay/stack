@@ -1,0 +1,22 @@
+kind: pipeline
+name: default
+steps:
+  # Drone does not pull git tags by default
+  - name: fetch
+    image: docker:git
+    commands:
+      - git fetch --tags
+
+# Test your go app
+  - name: test
+    image: golang
+    volumes:
+      - name: deps
+        path: /go
+        commands:
+          - go test -race -v ./... -cover
+
+# Save dependencies between steps
+volumes:
+  - name: deps
+    temp: {}
