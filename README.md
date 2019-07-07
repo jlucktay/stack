@@ -1,5 +1,7 @@
 # `stack`
 
+[![Build Status](https://cloud.drone.io/api/badges/jlucktay/stack/status.svg)](https://cloud.drone.io/jlucktay/stack)
+
 A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos.
 
 It currently has the following functions:
