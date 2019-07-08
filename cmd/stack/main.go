@@ -113,6 +113,9 @@ func main() {
 
 	// Execute on 'cancel' subcommand
 	if cancelCommand.Parsed() {
+		fmt.Println("'cancel' is not yet implemented.") // TODO
+		os.Exit(0)
+
 		if cancelCommand.NFlag() == 0 {
 			fmt.Println("Please specify one or more releases to cancel.")
 			cancelCommand.PrintDefaults()
@@ -124,6 +127,9 @@ func main() {
 
 	// Execute on 'issue' subcommand
 	if issueCommand.Parsed() {
+		fmt.Println("'issue' is not yet implemented.") // TODO
+		os.Exit(0)
+
 		if issueCommand.NFlag() == 0 {
 			fmt.Println("Please specify an issue to create/update.")
 			issueCommand.PrintDefaults()
