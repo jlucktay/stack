@@ -16,6 +16,20 @@ steps:
         commands:
           - go test -race -v ./... -cover
 
+# Run goreleaser only on tags
+  - name: release
+    image: golang
+    environment:
+      GITHUB_TOKEN:
+        from_secret: github_token
+    volumes:
+      - name: deps
+        path: /go
+    commands:
+      - curl -sL https://git.io/goreleaser | bash
+    when:
+      event: tag
+
 trigger:
   event:
   - pull_request
