@@ -30,10 +30,6 @@ steps:
     when:
       event: tag
 
-trigger:
-  event:
-  - pull_request
-
 # Save dependencies between steps
 volumes:
   - name: deps
