@@ -39,12 +39,7 @@ A newly-compiled `stack` binary will be placed in `$GOPATH/bin/`.
 
 ### Binary download
 
-<!--
-TODO build darwin/amd64
-via goreleaser
--->
-
-Coming soon!
+Binary releases can be downloaded [here on GitHub](https://github.com/jlucktay/stack/releases/latest).
 
 ## Configuration
 
@@ -66,14 +61,16 @@ from GitHub. Links to the appropriate pages on each site are in the example file
 
 ``` console
 $ stack build
-
-TODO
-...
-a build is queued
-an URL is returned here
-...
-TODO
+Build URL: https://dev.azure.com/MyAzureDevOpsOrg/12345678-90ab-cdef-1234-567890abcdef/_build/results?buildId=1234
 ```
+
+### `stack cancel`
+
+Coming soon!
+
+### `stack issue`
+
+Coming soon!
 
 ## Further implementation ideas
 
