@@ -1,6 +1,8 @@
 # `stack`
 
 [![Build Status](https://cloud.drone.io/api/badges/jlucktay/stack/status.svg)](https://cloud.drone.io/jlucktay/stack)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jlucktay/stack)](https://goreportcard.com/report/github.com/jlucktay/stack)
+[![GoDoc](https://godoc.org/github.com/jlucktay/stack?status.svg)](https://godoc.org/github.com/jlucktay/stack)
 
 A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos.
 
