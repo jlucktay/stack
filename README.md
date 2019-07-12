@@ -46,6 +46,14 @@ via goreleaser
 
 Coming soon!
 
+## Configuration
+
+There is a sample JSON file `stack.config.example.json` that should be copied over to your
+`$HOME/.config/stack/stack.config.json` directory and populated appropriately.
+
+Filling out this config file will require the generation of two personal access tokens, one from Azure DevOps and one
+from GitHub. Links to the appropriate pages on each site are in the example file.
+
 ## Usage
 
 `stack` has several subcommands:
@@ -70,7 +78,7 @@ TODO
 ## Further implementation ideas
 
 - [Cobra - A Commander for modern Go CLI interactions](https://github.com/spf13/cobra)
-- [Viper - Go configuration with fangs](https://github.com/spf13/viper)
+- ~~[Viper - Go configuration with fangs](https://github.com/spf13/viper)~~
 - [go-github - Go library for accessing the GitHub API](https://github.com/google/go-github)
 
 ## Contributing
