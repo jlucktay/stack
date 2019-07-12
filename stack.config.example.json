@@ -1,0 +1,14 @@
+{
+    "azureDevOps": {
+        "buildDefID": 5,
+        "org": "MyAzureDevOpsOrg",
+        "pat": "<52 character alphanumeric, generated here: https://dev.azure.com/$org/_usersSettings/tokens>",
+        "project": "MyAzureDevOpsProject"
+    },
+    "github": {
+        "org": "MyGitHubOrg",
+        "pat": "<40 character hexadecimal, generated here: https://github.com/settings/tokens>",
+        "repo": "MyGitHubRepo"
+    },
+    "stackPrefix": "/some/segment/of/repo/directory/structure/"
+}

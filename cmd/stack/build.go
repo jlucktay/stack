@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/jlucktay/stack/pkg/common"
+	"github.com/spf13/viper"
 )
 
 const yeahNah = `
@@ -33,26 +34,43 @@ func stackBuild(branch, targets string) {
 		log.Fatalf("you have %d unpushed commit(s) on the '%s' branch:\n%v", nUnpushed, branch, yeahNah)
 	}
 
-	// 1
-	pat, errPat := common.GetPAT()
-	if errPat != nil {
-		log.Fatal(errPat)
-	}
-
 	// 2
-	stackPath, errStackPath := getStackPath()
+	stackPath, errStackPath := common.GetStackPath(
+		viper.GetString("stackPrefix"),
+		fmt.Sprintf(
+			"github.com/%s/%s",
+			viper.GetString("github.org"),
+			viper.GetString("github.repo"),
+		),
+	)
 	if errStackPath != nil {
 		log.Fatal(errStackPath)
 	}
 
 	// 3
-	payload, errPayload := getPostPayload(5, stackPath, *buildTargets, *buildBranch)
+	parameters := make(map[string]string)
+	parameters["StackPath"] = stackPath
+
+	if len(targets) > 0 {
+		parameters["TerraformTarget"] = targets
+	}
+
+	payload, errPayload := common.GetPostPayload(uint(viper.GetInt("azureDevOps.buildDefID")), parameters, branch)
 	if errPayload != nil {
 		log.Fatal(errPayload)
 	}
 
 	// 4
-	apiResult, errAPI := sendBuildRequest(pat, payload)
+	apiURL := fmt.Sprintf(
+		"https://dev.azure.com/%s/%s/_apis/build/builds?api-version=5.0",
+		viper.GetString("azureDevOps.org"),
+		viper.GetString("azureDevOps.project"),
+	)
+	apiResult, errAPI := common.SendBuildRequest(
+		apiURL,
+		viper.GetString("azureDevOps.pat"),
+		payload,
+	)
 	if errAPI != nil {
 		log.Fatal(errAPI)
 	}
