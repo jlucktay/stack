@@ -60,7 +60,10 @@ Coming soon!
 $ stack build
 
 TODO
-...build things happen...
+...
+a build is queued
+an URL is returned here
+...
 TODO
 ```
 
