@@ -57,6 +57,9 @@ func main() {
 
 	// Set up 'issue' subcommand
 	issueCommand := flag.NewFlagSet("issue", flag.ExitOnError)
+	issueCommand.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "issueCommand.Usage: just give me some words!\n")
+	}
 
 	// Set up 'version' subcommand
 	versionCommand := flag.NewFlagSet("version", flag.ExitOnError)
