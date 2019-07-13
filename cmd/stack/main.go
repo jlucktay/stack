@@ -85,9 +85,13 @@ func main() {
 			log.Fatalf("error parsing cancel flags: %v", errParse)
 		}
 	case issueCommand.Name():
-		if errParse := issueCommand.Parse(os.Args[2:]); errParse != nil {
-			log.Fatalf("error parsing issue flags: %v", errParse)
+		// Execute on 'issue' subcommand
+		fmt.Println("'issue' is not yet fully implemented!")
+		if len(os.Args[2:]) == 0 {
+			issueCommand.Usage()
+			log.Fatalf("No issue text was given!")
 		}
+		createIssue(os.Args[2:]...)
 	case versionCommand.Name():
 		versionCommand.Usage()
 		os.Exit(0)
@@ -109,19 +113,5 @@ func main() {
 		}
 
 		cancelCommand.Visit(func(f *flag.Flag) {})
-	}
-
-	// Execute on 'issue' subcommand
-	if issueCommand.Parsed() {
-		fmt.Println("'issue' is not yet implemented.") // TODO
-		os.Exit(0)
-
-		if issueCommand.NFlag() == 0 {
-			fmt.Println("Please specify an issue to create/update.")
-			issueCommand.PrintDefaults()
-			os.Exit(1)
-		}
-
-		issueCommand.Visit(func(f *flag.Flag) {})
 	}
 }
