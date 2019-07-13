@@ -1,5 +1,12 @@
 package main
 
+// build flow:
+// 0.1. count unpushed commits and warn if > 0
+// 1. get stack path
+// 2. build POST payload using parameters
+// 3. send request to API
+// 4. print URL of build from API result
+
 import (
 	"fmt"
 	"log"
@@ -34,7 +41,7 @@ func stackBuild(branch, targets string) {
 		log.Fatalf("you have %d unpushed commit(s) on the '%s' branch:\n%v", nUnpushed, branch, yeahNah)
 	}
 
-	// 2
+	// 1
 	stackPath, errStackPath := common.GetStackPath(
 		viper.GetString("stackPrefix"),
 		fmt.Sprintf(
@@ -47,7 +54,7 @@ func stackBuild(branch, targets string) {
 		log.Fatal(errStackPath)
 	}
 
-	// 3
+	// 2
 	parameters := make(map[string]string)
 	parameters["StackPath"] = stackPath
 
@@ -60,7 +67,7 @@ func stackBuild(branch, targets string) {
 		log.Fatal(errPayload)
 	}
 
-	// 4
+	// 3
 	apiURL := fmt.Sprintf(
 		"https://dev.azure.com/%s/%s/_apis/build/builds?api-version=5.0",
 		viper.GetString("azureDevOps.org"),
@@ -75,6 +82,6 @@ func stackBuild(branch, targets string) {
 		log.Fatal(errAPI)
 	}
 
-	// 5
+	// 4
 	fmt.Println("Build URL:", apiResult)
 }
