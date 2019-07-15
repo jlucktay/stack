@@ -1,8 +1,8 @@
 # `stack`
 
-[![Build Status](https://cloud.drone.io/api/badges/jlucktay/stack/status.svg)](https://cloud.drone.io/jlucktay/stack)
-[![Go Report Card](https://goreportcard.com/badge/github.com/jlucktay/stack)](https://goreportcard.com/report/github.com/jlucktay/stack)
-[![GoDoc](https://godoc.org/github.com/jlucktay/stack?status.svg)](https://godoc.org/github.com/jlucktay/stack)
+[![Build Status][drone-badge]][drone]
+[![Go Report Card][goreportcard-badge]][goreportcard]
+[![GoDoc][godoc-badge]][godoc]
 
 A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos.
 
@@ -87,3 +87,11 @@ Please make sure to update tests as appropriate.
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+<!-- Badges and associated links -->
+[drone-badge]: https://cloud.drone.io/api/badges/jlucktay/stack/status.svg
+[drone]: https://cloud.drone.io/jlucktay/stack
+[goreportcard-badge]: https://goreportcard.com/badge/github.com/jlucktay/stack
+[goreportcard]: https://goreportcard.com/report/github.com/jlucktay/stack
+[godoc-badge]: https://godoc.org/github.com/jlucktay/stack?status.svg
+[godoc]: https://godoc.org/github.com/jlucktay/stack
