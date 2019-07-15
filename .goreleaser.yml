@@ -1,6 +1,7 @@
 before:
   hooks:
     - go mod download
+
 builds:
   -
     main: ./cmd/stack/
@@ -8,6 +9,7 @@ builds:
       - -v
     env:
       - CGO_ENABLED=0
+
 archives:
 - replacements:
     darwin: Darwin
@@ -15,10 +17,61 @@ archives:
     windows: Windows
     386: i386
     amd64: x86_64
+
 checksum:
   name_template: 'checksums.txt'
+
 snapshot:
   name_template: "{{ .Tag }}-next"
+
+brews:
+  -
+    # Repository to push the tap to.
+    github:
+      owner: jlucktay
+      name: homebrew-tap
+
+    # Folder inside the repository to put the formula.
+    folder: HomebrewFormula
+
+    # Caveats for the user of your binary.
+    caveats: "Please see the README for usage instructions: https://github.com/jlucktay/stack/blob/master/README.md"
+
+    # Your app's homepage.
+    homepage: "https://github.com/jlucktay/stack"
+
+    # Your app's description.
+    description: "A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos."
+
+    # Setting this will prevent goreleaser to actually try to commit the updated formula - instead, the formula file
+    # will be stored on the dist folder only, leaving the responsibility of publishing it to the user.
+    # If set to auto, the release will not be uploaded to the homebrew tap in case there is an indicator for prerelease
+    # in the tag e.g. v1.0.0-rc1
+    # Default is false.
+    skip_upload: false
+
+    # # Packages your package depends on.
+    # dependencies:
+    #   - git
+    #   - zsh
+
+    # # Packages that conflict with your package.
+    # conflicts:
+    #   - svn
+    #   - bash
+
+    # # So you can `brew test` your formula.
+    # # Default is empty.
+    # test: |
+    #   system "#{bin}/program --version"
+    #   ...
+
+    # # Custom install script for brew.
+    # # Default is 'bin.install "program"'.
+    # install: |
+    #   bin.install "program"
+    #   ...
+
 changelog:
   sort: asc
   filters:
