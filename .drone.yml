@@ -16,7 +16,7 @@ steps:
         commands:
           - go test -race -v ./... -cover
 
-# Run goreleaser only on tags
+# Run GoReleaser only on tags
   - name: release
     image: golang
     environment:
