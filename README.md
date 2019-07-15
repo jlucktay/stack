@@ -16,8 +16,17 @@ All of these functions are executed contextually against a specific Terraform st
 
 ## Installation
 
-There are two installation options: building `stack` from the source code hosted here, or downloading a pre-built
-binary for your desired platform.
+There are numerous installation options for `stack`:
+
+- [Homebrew](https://brew.sh/)
+- building from the source code hosted here
+- directly downloading a pre-built binary for your desired platform
+
+### Homebrew
+
+``` shell
+brew install jlucktay/tap/stack
+```
 
 ### Building from source
 
@@ -37,7 +46,7 @@ The source code will be located in `$GOPATH/src/github.com/jlucktay/stack/`.
 
 A newly-compiled `stack` binary will be placed in `$GOPATH/bin/`.
 
-### Binary download
+### Direct download of binary relases
 
 Binary releases can be downloaded [here on GitHub](https://github.com/jlucktay/stack/releases/latest).
 
