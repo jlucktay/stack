@@ -1,8 +1,8 @@
 # `stack`
 
-[![Build Status](https://cloud.drone.io/api/badges/jlucktay/stack/status.svg)](https://cloud.drone.io/jlucktay/stack)
-[![Go Report Card](https://goreportcard.com/badge/github.com/jlucktay/stack)](https://goreportcard.com/report/github.com/jlucktay/stack)
-[![GoDoc](https://godoc.org/github.com/jlucktay/stack?status.svg)](https://godoc.org/github.com/jlucktay/stack)
+[![Build Status][drone-badge]][drone]
+[![Go Report Card][goreportcard-badge]][goreportcard]
+[![GoDoc][godoc-badge]][godoc]
 
 A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos.
 
@@ -16,8 +16,17 @@ All of these functions are executed contextually against a specific Terraform st
 
 ## Installation
 
-There are two installation options: building `stack` from the source code hosted here, or downloading a pre-built
-binary for your desired platform.
+There are numerous installation options for `stack`:
+
+- [Homebrew](https://brew.sh/)
+- building from the source code hosted here
+- directly downloading a pre-built binary for your desired platform
+
+### Homebrew
+
+``` shell
+brew install jlucktay/tap/stack
+```
 
 ### Building from source
 
@@ -37,7 +46,7 @@ The source code will be located in `$GOPATH/src/github.com/jlucktay/stack/`.
 
 A newly-compiled `stack` binary will be placed in `$GOPATH/bin/`.
 
-### Binary download
+### Direct download of binary relases
 
 Binary releases can be downloaded [here on GitHub](https://github.com/jlucktay/stack/releases/latest).
 
@@ -76,7 +85,7 @@ Coming soon!
 
 - [Cobra - A Commander for modern Go CLI interactions](https://github.com/spf13/cobra)
 - ~~[Viper - Go configuration with fangs](https://github.com/spf13/viper)~~
-- [go-github - Go library for accessing the GitHub API](https://github.com/google/go-github)
+- ~~[go-github - Go library for accessing the GitHub API](https://github.com/google/go-github)~~
 
 ## Contributing
 
@@ -87,3 +96,11 @@ Please make sure to update tests as appropriate.
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+<!-- Badges and associated links -->
+[drone-badge]: https://cloud.drone.io/api/badges/jlucktay/stack/status.svg
+[drone]: https://cloud.drone.io/jlucktay/stack
+[goreportcard-badge]: https://goreportcard.com/badge/github.com/jlucktay/stack
+[goreportcard]: https://goreportcard.com/report/github.com/jlucktay/stack
+[godoc-badge]: https://godoc.org/github.com/jlucktay/stack?status.svg
+[godoc]: https://godoc.org/github.com/jlucktay/stack

@@ -1,50 +1,5 @@
 package main
 
-// stack
-// 0. parse optional arguments
-// 0. get stack path
-//
-// --- build / cancel
-// 0. get DevOps PAT from XDG dir
-//
-// --- --- build
-// 0. count unpushed commits and exit if > 0
-//
-// --- build / cancel
-// 0. build POST payload
-//
-// --- issue
-// 0. get GitHub PAT from XDG dir
-//
-
-//--- ^^^ --- new world --- ^^^
-//--- vvv --- old world --- vvv
-
-// build
-// flow:
-// 0. parse optional arguments
-// 0.1. count unpushed commits and warn if > 0
-// 1. get PAT from XDG dir
-// 2. get stack path
-// 3. build POST payload
-// 4. send request to API
-// 5. print URL of build from API result
-
-// cancel
-// flow:
-// 0. parse optional arguments
-// 1. get PAT from XDG dir
-// 2. build POST payload
-// 3. get all my active releases
-// 4. for each release:
-// 4.1 cancel
-// 4.2 abandon
-// 5. print IDs of cancelled/abandoned releases
-
-// issue
-// flow:
-// 0.
-
 import (
 	"flag"
 	"fmt"
