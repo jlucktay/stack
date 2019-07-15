@@ -11,6 +11,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Take ldflags from GoReleaser
+var (
+	//nolint
+	version, commit, date, builtBy string
+)
+
 func main() {
 	viper.SetConfigName("stack.config") // name of config file (without extension)
 	viper.SetConfigType("json")
@@ -28,6 +34,7 @@ func main() {
 		fmt.Fprintf(flag.CommandLine.Output(), "  build    Queue a build for a Terraform stack\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "  cancel   Cancel release(s) of a built/planned Terraform stack\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "  issue    Add/update an issue for a Terraform stack\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "  version  Show details of this binary's current version\n")
 		flag.PrintDefaults()
 	}
 
@@ -51,6 +58,15 @@ func main() {
 	// Set up 'issue' subcommand
 	issueCommand := flag.NewFlagSet("issue", flag.ExitOnError)
 
+	// Set up 'version' subcommand
+	versionCommand := flag.NewFlagSet("version", flag.ExitOnError)
+	versionCommand.Usage = func() {
+		fmt.Fprintf(
+			flag.CommandLine.Output(),
+			"stack v%s from commit %s, built %s by %s.\n",
+			version, commit, date, builtBy)
+	}
+
 	// Check which subcommand was given, and parse accordingly
 	if len(os.Args) < 2 {
 		flag.Usage()
@@ -72,6 +88,9 @@ func main() {
 		if errParse := issueCommand.Parse(os.Args[2:]); errParse != nil {
 			log.Fatalf("error parsing issue flags: %v", errParse)
 		}
+	case versionCommand.Name():
+		versionCommand.Usage()
+		os.Exit(0)
 	default:
 		fmt.Printf("'%v' is not a valid command.\n", os.Args[1])
 		flag.Usage()
