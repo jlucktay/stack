@@ -31,27 +31,17 @@ brews:
       owner: jlucktay
       name: homebrew-tap
 
-    # # Git author used to commit to the repository.
-    # # Defaults are shown.
-    # commit_author:
-    #   name: goreleaserbot
-    #   email: goreleaser@carlosbecker.com
-
     # Folder inside the repository to put the formula.
-    # Default is the root folder.
     folder: HomebrewFormula
 
     # Caveats for the user of your binary.
-    # Default is empty.
-    caveats: "How to use this binary"
+    caveats: "Please see the README for usage instructions: https://github.com/jlucktay/stack/blob/master/README.md"
 
     # Your app's homepage.
-    # Default is empty.
     homepage: "https://github.com/jlucktay/stack"
 
     # Your app's description.
-    # Default is empty.
-    description: "Software to create fast and easy drum rolls."
+    description: "A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos."
 
     # Setting this will prevent goreleaser to actually try to commit the updated formula - instead, the formula file
     # will be stored on the dist folder only, leaving the responsibility of publishing it to the user.
