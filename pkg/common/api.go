@@ -21,10 +21,9 @@ type build struct {
 	Links buildLink `json:"_links"`
 }
 
-// SendBuildRequest will POST a HTTP request with the given payload body to the given Azure DevOps API URL, using the
-// given token for authentication.
-// A successfully queued build will return its URL.
-func SendBuildRequest(apiurl, token, reqBody string) (*url.URL, error) {
+// CreateBuildRequest constructs a HTTP request with the payload body to be sent to the Azure DevOps API URL, using the
+// token for Basic authentication.
+func CreateBuildRequest(apiurl, token, reqBody string) (*http.Request, error) {
 	req, errReq := http.NewRequest(http.MethodPost, apiurl, strings.NewReader(reqBody))
 	if errReq != nil {
 		return nil, errReq
@@ -32,6 +31,12 @@ func SendBuildRequest(apiurl, token, reqBody string) (*url.URL, error) {
 	req.SetBasicAuth("username", token) // Azure DevOps API doesn't care about the username, just the token
 	req.Header.Add("Content-Type", "application/json")
 
+	return req, nil
+}
+
+// SendBuildRequest will POST the given HTTP request.
+// A successfully queued build will return its URL.
+func SendBuildRequest(req *http.Request) (*url.URL, error) {
 	resp, errResp := http.DefaultClient.Do(req)
 	if errResp != nil {
 		return nil, errResp
@@ -41,7 +46,7 @@ func SendBuildRequest(apiurl, token, reqBody string) (*url.URL, error) {
 	if resp.StatusCode != 200 {
 		return nil, fmt.Errorf("URL '%s': status code error: %d %s\n"+
 			"Does your Azure DevOps token have the 'Build (Read & execute)' scope?",
-			apiurl, resp.StatusCode, resp.Status)
+			req.URL, resp.StatusCode, resp.Status)
 	}
 
 	respBytes, errByteRead := ioutil.ReadAll(resp.Body)

@@ -73,13 +73,13 @@ func stackBuild(branch, targets string) {
 		viper.GetString("azureDevOps.org"),
 		viper.GetString("azureDevOps.project"),
 	)
-	apiResult, errAPI := common.SendBuildRequest(
-		apiURL,
-		viper.GetString("azureDevOps.pat"),
-		payload,
-	)
-	if errAPI != nil {
-		log.Fatal(errAPI)
+	apiRequest, errReq := common.CreateBuildRequest(apiURL, viper.GetString("azureDevOps.pat"), payload)
+	if errReq != nil {
+		log.Fatal(errReq)
+	}
+	apiResult, errRes := common.SendBuildRequest(apiRequest)
+	if errRes != nil {
+		log.Fatal(errRes)
 	}
 
 	// 4
