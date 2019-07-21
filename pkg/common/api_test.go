@@ -1,23 +1,22 @@
 package common_test
 
 import (
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/jlucktay/stack/pkg/common"
+	"github.com/matryer/is"
 )
 
 func TestBuildRequest(t *testing.T) {
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "hello %s\n", "world")
+	is := is.New(t)
 
-		for key, value := range r.Header {
-			fmt.Fprintf(w, "'%s'='%#v'\n", key, value)
-		}
+	handler := func(_ http.ResponseWriter, r *http.Request) {
+		auth := r.Header.Get("Authorization")
+		is.True(strings.HasPrefix(auth, "Basic"))                  // 'Authorization' header value starts with 'Basic'.
+		is.Equal("application/json", r.Header.Get("Content-Type")) // 'Content-Type' == 'application/json'.
 	}
 
 	payload, errPayload := common.GetPostPayload(123, map[string]string{"key": "value"}, "branch")
@@ -26,19 +25,11 @@ func TestBuildRequest(t *testing.T) {
 	}
 	req, errCreate := common.CreateBuildRequest(
 		"dev.azure.com/build/me/a/build",
-		"this is my PAT, there are many like it, but this one is mine",
+		"this is my PAT; there are many like it, but this one is mine",
 		payload)
 	if errCreate != nil {
 		t.Fatal(errCreate)
 	}
 	w := httptest.NewRecorder()
 	handler(w, req)
-
-	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
-
-	t.Log(resp.StatusCode)
-	t.Logf("%#v\n", resp.Header)
-	t.Log(string(body))
 }
