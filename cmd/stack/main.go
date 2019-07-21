@@ -89,7 +89,6 @@ func main() {
 		}
 	case issueCommand.Name():
 		// Execute on 'issue' subcommand
-		fmt.Println("'issue' is not yet fully implemented!")
 		if len(os.Args[2:]) == 0 {
 			issueCommand.Usage()
 			log.Fatalf("No issue text was given!")

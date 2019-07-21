@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/url"
+	"strings"
 
 	"github.com/google/go-github/v26/github"
 	"github.com/jlucktay/stack/pkg/common"
@@ -15,10 +17,9 @@ import (
 // issue flow:
 // 0. get current stack directory
 // 1. send issue to GitHub with appropriate directory tag
+// 2. print the URL of the newly-created issue
 
 func createIssue(text ...string) {
-	fmt.Printf("your text: %#v\n", text)
-
 	// 0
 	stackPath, errStackPath := common.GetStackPath(
 		viper.GetString("stackPrefix"),
@@ -32,11 +33,7 @@ func createIssue(text ...string) {
 		log.Fatal(errStackPath)
 	}
 
-	fmt.Printf("stackPath: '%s'\n", stackPath)
-
 	// 1
-	// WIP
-
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{
@@ -44,27 +41,30 @@ func createIssue(text ...string) {
 		},
 	)
 	tc := oauth2.NewClient(ctx, ts)
-
 	client := github.NewClient(tc)
 
 	issueRequest := &github.IssueRequest{
-		Title: github.String("hello world"),
+		Title: github.String(strings.Join(text, " ")),
 		Labels: &[]string{
 			stackPath,
 		},
 	}
 
-	// issue, response, errCreate := client.Issues.Create(
-	// 	ctx,
-	// 	viper.GetString("github.org"),
-	// 	viper.GetString("github.repo"),
-	// 	issueRequest,
-	// )
-	issue, response, errCreate := client.Issues.Create(ctx, "jlucktay", "stack", issueRequest)
+	issue, _, errCreate := client.Issues.Create(
+		ctx,
+		viper.GetString("github.org"),
+		viper.GetString("github.repo"),
+		issueRequest,
+	)
 	if errCreate != nil {
 		log.Fatal(errors.Wrap(errCreate, "errCreate!\n"))
 	}
 
-	fmt.Printf("\nissue:\n\t'%s'\n", issue)
-	fmt.Printf("\nresponse:\n\t'%#v'\n", *response)
+	// 2
+	newIssue, errParse := url.Parse(issue.GetHTMLURL())
+	if errParse != nil {
+		log.Fatal(errors.Wrap(errParse, "errParse!\n"))
+	}
+
+	fmt.Printf("New issue: %s\n", newIssue)
 }
