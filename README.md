@@ -94,7 +94,10 @@ Coming soon!
 
 ### `stack issue`
 
-Coming soon!
+``` console
+$ stack issue There's a problem with this stack!
+New issue: https://github.com/MyGitHubOrg/MyGitHubRepo/issues/1234
+```
 
 ## Further implementation ideas
 
