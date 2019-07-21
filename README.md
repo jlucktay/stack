@@ -8,7 +8,8 @@ A support tool for use with Terraform stacks, Azure DevOps build pipelines, and 
 
 It currently has the following functions:
 
-- queueing Terraform builds in Azure DevOps
+- initialising Terraform against remote state storage, for local execution
+- queueing Terraform builds in an Azure DevOps CI/CD pipeline
 - cancelling unneeded releases of aforementioned builds
 - creating GitHub issues in corresponding projects
 
@@ -18,14 +19,23 @@ All of these functions are executed contextually against a specific Terraform st
 
 There are numerous installation options for `stack`:
 
-- [Homebrew](https://brew.sh/)
+- [Homebrew](https://brew.sh)
 - building from the source code hosted here
 - directly downloading a pre-built binary for your desired platform
 
 ### Homebrew
 
+#### First time install
+
 ``` shell
+brew tap jlucktay/tap
 brew install jlucktay/tap/stack
+```
+
+#### Ongoing upgrades
+
+``` shell
+brew upgrade jlucktay/tap/stack
 ```
 
 ### Building from source
@@ -62,9 +72,14 @@ from GitHub. Links to the appropriate pages on each site are in the example file
 
 `stack` has several subcommands:
 
+- `init`
 - `build`
 - `cancel`
 - `issue`
+
+### `stack init`
+
+Coming soon!
 
 ### `stack build`
 
@@ -79,7 +94,10 @@ Coming soon!
 
 ### `stack issue`
 
-Coming soon!
+``` console
+$ stack issue There's a problem with this stack!
+New issue: https://github.com/MyGitHubOrg/MyGitHubRepo/issues/1234
+```
 
 ## Further implementation ideas
 
