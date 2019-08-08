@@ -1,7 +1,10 @@
 {
   "azure": {
-    "stateKeyPrefix": "first of three segments for key names of state files within blob storage",
-    "stateStorageAccount": "name of Azure storage account where Terraform state is stored",
+    "state": {
+      "keyPrefix": "first of three segments for key names of state files within blob storage",
+      "storageAccount": "name of Azure storage account where Terraform state is stored",
+      "subscription": "GUID of Azure subscription holding the state storage account"
+    },
     "subscriptions": {
       "alpha": "01234567-89ab-cdef-0123-456789abcdef",
       "bravo": "01234567-89ab-cdef-0123-456789abcdef",
