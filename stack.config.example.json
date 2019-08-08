@@ -1,14 +1,27 @@
 {
-    "azureDevOps": {
-        "buildDefID": 5,
-        "org": "MyAzureDevOpsOrg",
-        "pat": "<52 character alphanumeric, generated here: https://dev.azure.com/$org/_usersSettings/tokens>",
-        "project": "MyAzureDevOpsProject"
+  "azure": {
+    "state": {
+      "keyPrefix": "first of three segments for key names of state files within blob storage",
+      "storageAccount": "name of Azure storage account where Terraform state is stored",
+      "subscription": "GUID of Azure subscription holding the state storage account"
     },
-    "github": {
-        "org": "MyGitHubOrg",
-        "pat": "<40 character hexadecimal, generated here: https://github.com/settings/tokens>",
-        "repo": "MyGitHubRepo"
-    },
-    "stackPrefix": "/some/segment/of/repo/directory/structure/"
+    "subscriptions": {
+      "alpha": "01234567-89ab-cdef-0123-456789abcdef",
+      "bravo": "01234567-89ab-cdef-0123-456789abcdef",
+      "charlie": "01234567-89ab-cdef-0123-456789abcdef",
+      "exampleSubName": "subscription GUIDs go here"
+    }
+  },
+  "azureDevOps": {
+    "buildDefID": 5,
+    "org": "MyAzureDevOpsOrg",
+    "pat": "<52 character alphanumeric, generated here: https://dev.azure.com/$org/_usersSettings/tokens>",
+    "project": "MyAzureDevOpsProject"
+  },
+  "github": {
+    "org": "MyGitHubOrg",
+    "pat": "<40 character hexadecimal, generated here: https://github.com/settings/tokens>",
+    "repo": "MyGitHubRepo"
+  },
+  "stackPrefix": "/some/segment/of/repo/directory/structure/"
 }

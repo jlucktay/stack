@@ -31,9 +31,10 @@ func main() {
 	// Define Usage() for flags and '--help'
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Available commands for '%s':\n", os.Args[0])
-		fmt.Fprintf(flag.CommandLine.Output(), "  build    Queue a build for a Terraform stack\n")
-		fmt.Fprintf(flag.CommandLine.Output(), "  cancel   Cancel release(s) of a built/planned Terraform stack\n")
-		fmt.Fprintf(flag.CommandLine.Output(), "  issue    Add/update an issue for a Terraform stack\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "  build    Queue a build of this Terraform stack\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "  cancel   Cancel release(s) of built/planned Terraform stack\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "  init     Initialise this Terraform stack against remote state\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "  issue    Add/update a GitHub issue for this Terraform stack\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "  version  Show details of this binary's current version\n")
 		flag.PrintDefaults()
 	}
@@ -54,6 +55,14 @@ func main() {
 
 	// Set up 'cancel' subcommand
 	cancelCommand := flag.NewFlagSet("cancel", flag.ExitOnError)
+
+	// Set up 'init' subcommand
+	initCommand := flag.NewFlagSet("init", flag.ExitOnError)
+	initCommand.Usage = func() {
+		fmt.Fprintf(
+			flag.CommandLine.Output(),
+			"no flags here, just stacks to initialise!\n")
+	}
 
 	// Set up 'issue' subcommand
 	issueCommand := flag.NewFlagSet("issue", flag.ExitOnError)
@@ -87,6 +96,9 @@ func main() {
 		if errParse := cancelCommand.Parse(os.Args[2:]); errParse != nil {
 			log.Fatalf("error parsing cancel flags: %v", errParse)
 		}
+	case initCommand.Name():
+		// Execute on 'init' subcommand
+		initStack()
 	case issueCommand.Name():
 		// Execute on 'issue' subcommand
 		if len(os.Args[2:]) == 0 {
