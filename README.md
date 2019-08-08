@@ -65,8 +65,19 @@ Binary releases can be downloaded [here on GitHub](https://github.com/jlucktay/s
 There is a sample JSON file `stack.config.example.json` that should be copied over to your
 `$HOME/.config/stack/stack.config.json` directory and populated appropriately.
 
+**Note:** `stack` will also look in the current working directory for this configuration file.
+
 Filling out this config file will require the generation of two personal access tokens, one from Azure DevOps and one
 from GitHub. Links to the appropriate pages on each site are in the example file.
+
+### Tools
+
+Some of the functionality in `stack` comes from executing other tools, which will need to be installed and available on
+your `$PATH`:
+
+- [Azure CLI](https://docs.microsoft.com/cli/azure)
+- [Git](https://git-scm.com)
+- [Terraform](https://www.terraform.io)
 
 ## Usage
 
@@ -79,25 +90,75 @@ from GitHub. Links to the appropriate pages on each site are in the example file
 
 ### `stack init`
 
-Coming soon!
+Initialises the current Terraform stack directory using the Azure storage account for the remote state backend.
+
+``` bash
+$ stack init
+Switching subscriptions... done.
+Retrieving storage account key... done.
+Switching subscriptions again... done.
+Initialising Terraform with following dynamic values:
+...
+```
+
+#### `stack init` relevant config keys
+
+- `.azure.state.keyPrefix`: the first of three segments that will make up the blob name for the Terraform backend state
+in the Azure storage account
+- `.azure.state.storageAccount`: the name of the storage account in Azure where Terraform stores state
+- `.azure.state.subscription`: the GUID of the Azure subscription holding the Terraform state storage account
+- `.azure.subscriptions.*`: populate this object with all relevant subscriptions, where the key is the name to map to
+the directory structure of the Terraform stack, and the value is the GUID of said subscription
+- `.stackPrefix`: the name of the parent directory holding all of the Terraform stacks
 
 ### `stack build`
 
-``` console
+Queues a build in Azure DevOps for the current Terraform stack directory.
+
+``` bash
 $ stack build
 Build URL: https://dev.azure.com/MyAzureDevOpsOrg/12345678-90ab-cdef-1234-567890abcdef/_build/results?buildId=1234
 ```
 
+- `.azureDevOps.buildDefID`: the build definition ID within Azure DevOps to queue
+- `.azureDevOps.org`: the name of the organisation within Azure DevOps
+- `.azureDevOps.pat`: the user's personal access token for Azure DevOps
+- `.azureDevOps.project`: the name of the project under the organisation within Azure DevOps
+- `.stackPrefix`: the name of the parent directory holding all of the Terraform stacks
+
+#### `stack build` optional arguments
+
+##### `--branch`
+
+If given, build from this branch. Defaults to the current branch.
+
+##### `--target`
+
+If given, target these specific Terraform resources only. Delimit multiple target IDs with a semi-colon ';'.
+For example:
+
+``` bash
+stack build --target="azurerm_resource_group.main;azurerm_virtual_machine.app;azurerm_virtual_machine.database"
+```
+
 ### `stack cancel`
 
-Coming soon!
+Cancels any pending releases in Azure DevOps.
+
+**Coming soon!**
 
 ### `stack issue`
 
-``` console
-$ stack issue There's a problem with this stack!
+Creates an issue in GitHub with a label referring to the current Terraform stack directory.
+
+``` bash
+$ stack issue "There's a problem with this stack!"
 New issue: https://github.com/MyGitHubOrg/MyGitHubRepo/issues/1234
 ```
+
+- `.github.org`: the name of the organisation within GitHub
+- `.github.pat`: the user's personal access token for GitHub
+- `.github.repo`: the name of the repository under the organisation within GitHub
 
 ## Further implementation ideas
 
