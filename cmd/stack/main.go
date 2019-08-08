@@ -51,7 +51,7 @@ func main() {
 	buildBranch := buildCommand.String("branch", currentBranch, "If given, build from this branch.\n"+
 		"Defaults to the current branch.")
 	buildTargets := buildCommand.String("target", "", "If given, target these specific Terraform resources only.\n"+
-		"Delimit between targets with a semi-colon ';'.")
+		"Delimit multiple target IDs with a semi-colon ';'.")
 
 	// Set up 'cancel' subcommand
 	cancelCommand := flag.NewFlagSet("cancel", flag.ExitOnError)
