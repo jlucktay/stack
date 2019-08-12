@@ -70,10 +70,54 @@ There is a sample JSON file `stack.config.example.json` that should be copied ov
 Filling out this config file will require the generation of two personal access tokens, one from Azure DevOps and one
 from GitHub. Links to the appropriate pages on each site are in the example file.
 
-### Tools
+### Mapping subscriptions to remote state storage containers and keys
 
-Some of the functionality in `stack` comes from executing other tools, which will need to be installed and available on
-your `$PATH`:
+Under the `.azure.subscriptions` section, all keys defined here will map verbatim to the parent directory's name when
+`stack` is executed. The values need to be set as GUIDs for the corresponding subscriptions in Azure.
+
+Assume - for this example's sake - that the working directory is as follows:
+
+``` bash
+/git/MyGitHubOrg/MyGitHubRepo/stack-prefix/subscription-alias/one/two/three/my-stack
+```
+
+Also assume that the following values are configured:
+
+- `.azure.state.storageAccount` = `mytfstatestorage`
+- `.azure.subscriptions.subscription-alias` = `01234567-89ab-cdef-0123-456789abcdef`
+- `.github.org` = `MyGitHubOrg`
+- `.github.repo` = `MyGitHubRepo`
+- `.stackPrefix` = `stack-prefix`
+
+The keys under `.azure.subscriptions` map to the first child directory underneath the directory set under
+`.stackPrefix`.
+
+For remote state storage within the storage account, the key value is made up of three components:
+
+1. the `.stackPrefix` value (`stack-prefix` in this example)
+1. the name of the stack's direct parent directory (`three`)
+1. the name of the stack directory itself (`my-stack`)
+
+The container within the remote state storage account maps to the GUID of the subscription.
+
+``` bash
+$ pwd
+/git/MyGitHubOrg/MyGitHubRepo/stack-prefix/subscription-alias/one/two/three/my-stack
+$ stack init
+Switching subscriptions... done.
+Retrieving storage account key... done.
+Switching subscriptions again... done.
+Initialising Terraform with following dynamic values:
+        container_name:         01234567-89ab-cdef-0123-456789abcdef
+        key:                    stack-prefix.three.my-stack
+        storage_account:        mytfstatestorage
+...
+```
+
+### Other tools in use
+
+Some of the functionality in `stack` comes from executing other tools, which will need to be installed, configured,
+authed, and available on your `$PATH`:
 
 - [Azure CLI](https://docs.microsoft.com/cli/azure)
 - [Git](https://git-scm.com)

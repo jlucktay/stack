@@ -6,10 +6,9 @@
       "subscription": "GUID of Azure subscription holding the state storage account"
     },
     "subscriptions": {
-      "alpha": "01234567-89ab-cdef-0123-456789abcdef",
-      "bravo": "01234567-89ab-cdef-0123-456789abcdef",
-      "charlie": "01234567-89ab-cdef-0123-456789abcdef",
-      "exampleSubName": "subscription GUIDs go here"
+      "a stack under '/<stackPrefix>/<this key>/<a stack name>/'": "will map to subscription associated with <this key>",
+      "exampleSubName": "subscription GUIDs go here",
+      "this key will be matched to a parent directory": "this value will map said directory to a specific subscription"
     }
   },
   "azureDevOps": {
