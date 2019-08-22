@@ -7,14 +7,16 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/spf13/viper"
 )
 
 // Take ldflags from GoReleaser
+//nolint
 var (
-	//nolint
-	version, commit, date, builtBy string
+	version, commit, builtBy string
+	date                     = time.Now().UTC().String()
 )
 
 func main() {
