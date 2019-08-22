@@ -1,12 +1,5 @@
 package main
 
-// build flow:
-// 0.1. count unpushed commits and warn if > 0
-// 1. get stack path
-// 2. build POST payload using parameters
-// 3. send request to API
-// 4. print URL of build from API result
-
 import (
 	"fmt"
 	"log"
@@ -26,7 +19,14 @@ const yeahNah = `
 !  / ______|\___  >____  /___|  / \____|__  (____  /___|  /
 !  \/           \/     \/     \/          \/     \/     \/`
 
-func stackBuild(branch, targets string) {
+// queue flow:
+// 0.1. count unpushed commits and warn if > 0
+// 1. get stack path
+// 2. build POST payload using parameters
+// 3. send request to API
+// 4. print URL of build from API result
+
+func stackQueue(branch, targets string, defID uint) {
 	// 0.1
 	unpushedRaw, errExec := exec.Command("git", "rev-list", "--count", "@{u}..").Output()
 	if errExec != nil {
@@ -62,7 +62,7 @@ func stackBuild(branch, targets string) {
 		parameters["TerraformTarget"] = targets
 	}
 
-	payload, errPayload := common.GetPostPayload(uint(viper.GetInt("azureDevOps.buildDefID")), parameters, branch)
+	payload, errPayload := common.GetPostPayload(defID, parameters, branch)
 	if errPayload != nil {
 		log.Fatal(errPayload)
 	}
@@ -83,5 +83,5 @@ func stackBuild(branch, targets string) {
 	}
 
 	// 4
-	fmt.Println("Build URL:", apiResult)
+	fmt.Println("Stack (plan) URL:", apiResult)
 }

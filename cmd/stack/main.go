@@ -33,8 +33,9 @@ func main() {
 	// Define Usage() for flags and '--help'
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Available commands for '%s':\n", os.Args[0])
-		fmt.Fprintf(flag.CommandLine.Output(), "  build    Queue a build of this Terraform stack\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "  build    Queue a plan to build this Terraform stack\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "  cancel   Cancel release(s) of built/planned Terraform stack\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "  destroy  Queue a plan to destroy this Terraform stack\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "  init     Initialise this Terraform stack against remote state\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "  issue    Add/update a GitHub issue for this Terraform stack\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "  version  Show details of this binary's current version\n")
@@ -50,13 +51,20 @@ func main() {
 
 	// Set up 'build' subcommand
 	buildCommand := flag.NewFlagSet("build", flag.ExitOnError)
-	buildBranch := buildCommand.String("branch", currentBranch, "If given, build from this branch.\n"+
+	buildBranch := buildCommand.String("branch", currentBranch, "If given, plan from this branch.\n"+
 		"Defaults to the current branch.")
 	buildTargets := buildCommand.String("target", "", "If given, target these specific Terraform resources only.\n"+
 		"Delimit multiple target IDs with a semi-colon ';'.")
 
 	// Set up 'cancel' subcommand
 	cancelCommand := flag.NewFlagSet("cancel", flag.ExitOnError)
+
+	// Set up 'destroy' subcommand
+	destroyCommand := flag.NewFlagSet("destroy", flag.ExitOnError)
+	destroyBranch := destroyCommand.String("branch", currentBranch, "If given, plan from this branch.\n"+
+		"Defaults to the current branch.")
+	destroyTargets := destroyCommand.String("target", "", "If given, target these specific Terraform resources only.\n"+
+		"Delimit multiple target IDs with a semi-colon ';'.")
 
 	// Set up 'init' subcommand
 	initCommand := flag.NewFlagSet("init", flag.ExitOnError)
@@ -93,11 +101,17 @@ func main() {
 		if errParse := buildCommand.Parse(os.Args[2:]); errParse != nil {
 			log.Fatalf("error parsing build flags: %v", errParse)
 		}
-		stackBuild(*buildBranch, *buildTargets)
+		stackQueue(*buildBranch, *buildTargets, uint(viper.GetInt("azureDevOps.buildDefID")))
 	case cancelCommand.Name():
 		if errParse := cancelCommand.Parse(os.Args[2:]); errParse != nil {
 			log.Fatalf("error parsing cancel flags: %v", errParse)
 		}
+	case destroyCommand.Name():
+		// Parse and execute 'destroy' subcommand
+		if errParse := destroyCommand.Parse(os.Args[2:]); errParse != nil {
+			log.Fatalf("error parsing destroy flags: %v", errParse)
+		}
+		stackQueue(*destroyBranch, *destroyTargets, uint(viper.GetInt("azureDevOps.destroyDefID")))
 	case initCommand.Name():
 		// Execute on 'init' subcommand
 		initStack()
