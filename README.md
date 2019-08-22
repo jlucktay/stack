@@ -9,7 +9,7 @@ A support tool for use with Terraform stacks, Azure DevOps build pipelines, and 
 It currently has the following functions:
 
 - initialising Terraform against remote state storage, for local execution
-- queueing Terraform builds in an Azure DevOps CI/CD pipeline
+- queueing Terraform plans to build and destroy stacks in an Azure DevOps CI/CD pipeline
 - cancelling unneeded releases of aforementioned builds
 - creating GitHub issues in corresponding projects
 
@@ -129,6 +129,7 @@ authed, and available on your `$PATH`:
 
 - `init`
 - `build`
+- `destroy`
 - `cancel`
 - `issue`
 
@@ -157,7 +158,7 @@ the directory structure of the Terraform stack, and the value is the GUID of sai
 
 ### `stack build`
 
-Queues a build in Azure DevOps for the current Terraform stack directory.
+Queues a plan in Azure DevOps to build the Terraform stack in the current directory.
 
 ``` bash
 $ stack build
@@ -184,6 +185,14 @@ For example:
 ``` bash
 stack build --target="azurerm_resource_group.main;azurerm_virtual_machine.app;azurerm_virtual_machine.database"
 ```
+
+### `stack destroy`
+
+Queues a plan in Azure DevOps to destroy the Terraform stack in the current directory.
+
+Functionally identical to the `stack build` subcommand, including `--branch` and `--target` optional arguments, with
+the singular difference being that this subcommand references `.azureDevOps.destroyDefID` in the config instead of
+`.azureDevOps.buildDefID`.
 
 ### `stack cancel`
 
