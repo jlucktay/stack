@@ -12,8 +12,8 @@ import (
 )
 
 // Take ldflags from GoReleaser
-//nolint
 var (
+	//nolint
 	version, commit, date, builtBy string
 )
 
