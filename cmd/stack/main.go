@@ -40,12 +40,12 @@ func main() {
 		flag.PrintDefaults()
 	}
 
-	// Parse out current git branch for use as a default for one of the 'build' flags
+	// Parse out current git branch for use as a default for some flags.
+	var currentBranch string
 	gitRaw, errExec := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
-	if errExec != nil {
-		log.Fatal(errExec)
+	if errExec == nil {
+		currentBranch = strings.TrimSpace(string(gitRaw))
 	}
-	currentBranch := strings.TrimSpace(string(gitRaw))
 
 	// Set up 'build' subcommand
 	buildCommand := flag.NewFlagSet("build", flag.ExitOnError)
