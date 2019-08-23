@@ -18,17 +18,17 @@ var (
 )
 
 func main() {
-	viper.SetConfigName("stack.config") // name of config file (without extension)
+	viper.SetConfigName("stack.config") // Name of config file, without extension.
 	viper.SetConfigType("json")
-	viper.AddConfigPath("$HOME/.config/stack") // path to look for the config file in
-	viper.AddConfigPath(".")                   // optionally look for config in the working directory
+	viper.AddConfigPath("$HOME/.config/stack") // Path to look for the config file in.
+	viper.AddConfigPath(".")                   // Optionally look for config in the working directory.
 
-	errViperRead := viper.ReadInConfig() // Find and read the config file
-	if errViperRead != nil {             // Handle errors reading the config file
+	errViperRead := viper.ReadInConfig() // Find and read the config file.
+	if errViperRead != nil {             // Handle errors reading the config file.
 		log.Fatalf("fatal error with config file: %s\n", errViperRead)
 	}
 
-	// Define Usage() for flags and '--help'
+	// Define Usage() for flags and '--help'.
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Available commands for '%s':\n", os.Args[0])
 		fmt.Fprintf(flag.CommandLine.Output(), "  build    Queue a plan to build this Terraform stack\n")
