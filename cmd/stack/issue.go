@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/google/go-github/v26/github"
+	"github.com/google/go-github/v27/github"
 	"github.com/jlucktay/stack/pkg/common"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
