@@ -28,8 +28,9 @@ func initStack() {
 	}
 
 	xStack := strings.Split(stackPath, string(os.PathSeparator))
-	if len(xStack) < 3 {
-		log.Fatalf("stack path '%s' should have be least 3 levels deep", stackPath)
+	if len(xStack) < 2 {
+		log.Fatalf("stack path '%s' should be least 2 levels deep, below '%s'",
+			stackPath, viper.GetString("stackPrefix"))
 	}
 
 	const configSubs = "azure.subscriptions"
