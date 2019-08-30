@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"strings"
 	"sync"
+	"syscall"
 
 	"github.com/jlucktay/stack/pkg/common"
 	"github.com/spf13/viper"
@@ -141,7 +142,13 @@ func initStack() {
 	go func() {
 		errWait := cmdInit.Wait()
 		if errWait != nil {
-			panic(errWait)
+			if exitErr, ok := errWait.(*exec.ExitError); ok {
+				if status, ok := exitErr.Sys().(syscall.WaitStatus); ok {
+					log.Printf("Exit status: %d", status.ExitStatus())
+				}
+			} else {
+				panic(errWait)
+			}
 		}
 		wg.Wait()
 		close(chOut)
