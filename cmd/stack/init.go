@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 
 	"github.com/jlucktay/stack/pkg/common"
 	"github.com/spf13/viper"
@@ -101,18 +102,52 @@ func initStack() {
 		fmt.Sprintf("--backend-config=container_name=%s", subs[stackSub]),
 		fmt.Sprintf("--backend-config=key=%s", stateKey),
 		fmt.Sprintf("--backend-config=storage_account_name=%s", viper.GetString("azure.state.storageAccount")))
-	stdout, _ := cmdInit.StdoutPipe()
+
+	var wg sync.WaitGroup
+
+	stdout, errOut := cmdInit.StdoutPipe()
+	if errOut != nil {
+		panic(errOut)
+	}
+	stderr, errErr := cmdInit.StderrPipe()
+	if errErr != nil {
+		panic(errErr)
+	}
 	errStart := cmdInit.Start()
 	if errStart != nil {
-		log.Fatal(errStart)
+		panic(errStart)
 	}
-	scanner := bufio.NewScanner(stdout)
-	scanner.Split(bufio.ScanLines)
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-	}
-	errWait := cmdInit.Wait()
-	if errWait != nil {
-		log.Fatal(errWait)
+
+	chOut := make(chan string)
+
+	scanOut := bufio.NewScanner(stdout)
+	wg.Add(1)
+	go func() {
+		for scanOut.Scan() {
+			chOut <- scanOut.Text()
+		}
+		wg.Done()
+	}()
+
+	scanErr := bufio.NewScanner(stderr)
+	wg.Add(1)
+	go func() {
+		for scanErr.Scan() {
+			chOut <- scanErr.Text()
+		}
+		wg.Done()
+	}()
+
+	go func() {
+		errWait := cmdInit.Wait()
+		if errWait != nil {
+			panic(errWait)
+		}
+		wg.Wait()
+		close(chOut)
+	}()
+
+	for t := range chOut {
+		fmt.Println(t)
 	}
 }
