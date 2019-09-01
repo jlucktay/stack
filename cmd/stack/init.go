@@ -139,12 +139,15 @@ func initStack() {
 		wg.Done()
 	}()
 
+	var exitStatus int
+
 	go func() {
 		errWait := cmdInit.Wait()
 		if errWait != nil {
 			if exitErr, ok := errWait.(*exec.ExitError); ok {
 				if status, ok := exitErr.Sys().(syscall.WaitStatus); ok {
-					log.Printf("Exit status: %d", status.ExitStatus())
+					exitStatus = status.ExitStatus()
+					log.Printf("Exit status: %d", exitStatus)
 				}
 			} else {
 				panic(errWait)
@@ -157,4 +160,6 @@ func initStack() {
 	for t := range chOut {
 		fmt.Println(t)
 	}
+
+	os.Exit(exitStatus)
 }
