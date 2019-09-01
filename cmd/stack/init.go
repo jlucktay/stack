@@ -119,13 +119,13 @@ func initStack() {
 		panic(errStart)
 	}
 
-	chOut := make(chan string)
+	chPrint := make(chan string)
 
 	scanOut := bufio.NewScanner(stdout)
 	wg.Add(1)
 	go func() {
 		for scanOut.Scan() {
-			chOut <- scanOut.Text()
+			chPrint <- scanOut.Text()
 		}
 		wg.Done()
 	}()
@@ -134,7 +134,7 @@ func initStack() {
 	wg.Add(1)
 	go func() {
 		for scanErr.Scan() {
-			chOut <- scanErr.Text()
+			chPrint <- scanErr.Text()
 		}
 		wg.Done()
 	}()
@@ -154,11 +154,11 @@ func initStack() {
 			}
 		}
 		wg.Wait()
-		close(chOut)
+		close(chPrint)
 	}()
 
-	for t := range chOut {
-		fmt.Println(t)
+	for line := range chPrint {
+		fmt.Println(line)
 	}
 
 	os.Exit(exitStatus)
