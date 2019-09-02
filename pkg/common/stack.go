@@ -40,7 +40,7 @@ func validateGitRemotes(needle string) error {
 
 	for _, remote := range strings.Split(string(remotes), "\n") {
 		if strings.Contains(remote, "(fetch)") &&
-			(strings.Contains(remote, needle) || strings.Contains(remote, strings.ReplaceAll(needle, ":", "/"))) {
+			(strings.Contains(remote, needle) || strings.Contains(strings.ReplaceAll(remote, ":", "/"), needle)) {
 			found = true
 			break
 		}
