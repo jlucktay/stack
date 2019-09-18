@@ -55,7 +55,7 @@ func StackQueue(branch, targets string, defID uint) {
 		panic(errAtoi)
 	}
 	if nUnpushed > 0 {
-		log.Fatalf("you have %d unpushed commit(s) on the '%s' branch:\n%v", nUnpushed, branch, yeahNah)
+		panic(fmt.Sprintf("you have %d unpushed commit(s)) on the '%s' branch:\n%v", nUnpushed, branch, yeahNah))
 	}
 
 	// 1

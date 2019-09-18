@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -80,6 +79,6 @@ func initConfig() {
 	if errViperRead := viper.ReadInConfig(); errViperRead == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	} else {
-		log.Fatalf("Fatal error reading config file '%s':\n%s\n", viper.ConfigFileUsed(), errViperRead)
+		panic(fmt.Sprintf("Fatal error reading config file '%s':\n%s\n", viper.ConfigFileUsed(), errViperRead))
 	}
 }

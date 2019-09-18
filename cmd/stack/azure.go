@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"os/exec"
 
 	"github.com/spf13/viper"
@@ -20,7 +19,7 @@ func mustGetStorageAccountKey() string {
 	fmt.Printf("Retrieving storage account key... ")
 	errSAKeys := cmdSAKeys.Run()
 	if errSAKeys != nil {
-		log.Fatalf("'az' errored when fetching storage account keys: %s", errSAKeys)
+		panic(fmt.Sprintf("'az' errored when fetching storage account keys: %s", errSAKeys))
 	}
 	fmt.Println("done.")
 	outBytes := out.Bytes()
@@ -32,7 +31,7 @@ func mustGetStorageAccountKey() string {
 
 	errUmKeys := json.Unmarshal(outBytes, &saKeys)
 	if errUmKeys != nil {
-		log.Fatalf("unmarshaling '%s': %s", string(outBytes), errUmKeys)
+		panic(fmt.Sprintf("unmarshaling '%s': %s", string(outBytes), errUmKeys))
 	}
 
 	return saKeys[0].Value

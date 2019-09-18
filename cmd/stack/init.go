@@ -2,29 +2,30 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/jlucktay/stack/pkg/common"
 
 	"github.com/spf13/viper"
 )
 
 //nolint
 func initStack() {
-	stackPath := mustGetStackPath()
+	stackPath := common.MustGetStackPath()
 
 	xStack := strings.Split(stackPath, string(os.PathSeparator))
 	if len(xStack) < 2 {
-		log.Fatalf("stack path '%s' should be least 2 levels deep, below '%s'",
-			stackPath, viper.GetString("stackPrefix"))
+		panic(fmt.Sprintf("stack path '%s' should be least 2 levels deep, below '%s'",
+			stackPath, viper.GetString("stackPrefix")))
 	}
 
 	const configSubs = "azure.subscriptions"
 	subs := viper.GetStringMapString(configSubs)
 	stackSub := xStack[0]
 	if _, found := subs[stackSub]; !found {
-		log.Fatalf("the subscription key '%s' is not present under '%s' in your config", stackSub, configSubs)
+		panic(fmt.Sprintf("the subscription key '%s' is not present under '%s' in your config", stackSub, configSubs))
 	}
 
 	stackParent := xStack[len(xStack)-2]
@@ -37,8 +38,8 @@ func initStack() {
 	fmt.Printf("Switching subscriptions... ")
 	errSetAccountSA := cmdSetAccountSA.Run()
 	if errSetAccountSA != nil {
-		log.Fatalf("'az' errored when setting current subscription to %s: %s",
-			viper.GetString("azure.state.subscription"), errSetAccountSA)
+		panic(fmt.Sprintf("'az' errored when setting current subscription to %s: %s",
+			viper.GetString("azure.state.subscription"), errSetAccountSA))
 	}
 	fmt.Println("done.")
 
@@ -50,8 +51,8 @@ func initStack() {
 	fmt.Printf("Switching subscriptions again... ")
 	errSetAccountTarget := cmdSetAccountTarget.Run()
 	if errSetAccountTarget != nil {
-		log.Fatalf("'az' errored when setting current subscription to %s: %s",
-			subs[stackSub], errSetAccountTarget)
+		panic(fmt.Sprintf("'az' errored when setting current subscription to %s: %s",
+			subs[stackSub], errSetAccountTarget))
 	}
 	fmt.Println("done.")
 

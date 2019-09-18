@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/spf13/viper"
@@ -42,7 +41,7 @@ func main() {
 	case destroyCommand.Name():
 		// Parse and execute 'destroy' subcommand
 		if errParse := destroyCommand.Parse(os.Args[2:]); errParse != nil {
-			log.Fatalf("error parsing destroy flags: %v", errParse)
+			panic(fmt.Sprintf("error parsing destroy flags: %v", errParse))
 		}
 		stackQueue(*destroyBranch, *destroyTargets, uint(viper.GetInt("azureDevOps.destroyDefID")))
 	case initCommand.Name():
@@ -52,7 +51,7 @@ func main() {
 		// Execute on 'issue' subcommand
 		if len(os.Args[2:]) == 0 {
 			issueCommand.Usage()
-			log.Fatalf("No issue text was given!")
+			panic(fmt.Sprintf("No issue text was given!"))
 		}
 		createIssue(os.Args[2:]...)
 	default:
