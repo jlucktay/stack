@@ -1,34 +1,18 @@
 package main
 
 import (
-	"bufio"
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
-	"sync"
-	"syscall"
 
-	"github.com/jlucktay/stack/pkg/common"
 	"github.com/spf13/viper"
 )
 
 //nolint
 func initStack() {
-	stackPath, errStackPath := common.GetStackPath(
-		viper.GetString("stackPrefix"),
-		fmt.Sprintf(
-			"github.com/%s/%s",
-			viper.GetString("github.org"),
-			viper.GetString("github.repo"),
-		),
-	)
-	if errStackPath != nil {
-		panic(errStackPath)
-	}
+	stackPath := mustGetStackPath()
 
 	xStack := strings.Split(stackPath, string(os.PathSeparator))
 	if len(xStack) < 2 {
@@ -59,27 +43,7 @@ func initStack() {
 	fmt.Println("done.")
 
 	// Get access key; enables programmatic access to the storage account
-	cmdSAKeys := exec.Command("az", "storage", "account", "keys", "list", "--account-name",
-		viper.GetString("azure.state.storageAccount"))
-	var out bytes.Buffer
-	cmdSAKeys.Stdout = &out
-	fmt.Printf("Retrieving storage account key... ")
-	errSAKeys := cmdSAKeys.Run()
-	if errSAKeys != nil {
-		log.Fatalf("'az' errored when fetching storage account keys: %s", errSAKeys)
-	}
-	fmt.Println("done.")
-	outBytes := out.Bytes()
-
-	// Parse key out of JSON
-	var saKeys []struct {
-		Value string
-	}
-
-	errUmKeys := json.Unmarshal(outBytes, &saKeys)
-	if errUmKeys != nil {
-		log.Fatalf("unmarshaling '%s': %s", string(outBytes), errUmKeys)
-	}
+	saKey := mustGetStorageAccountKey()
 
 	// Switch subscriptions to given target
 	cmdSetAccountTarget := exec.Command("az", "account", "set", fmt.Sprintf("--subscription=%s", subs[stackSub]))
@@ -93,74 +57,16 @@ func initStack() {
 
 	// Announce init
 	fmt.Println("Initialising Terraform with following dynamic values:")
-	// fmt.Printf("\taccess_key:\t\t%s\n", saKeys[0].Value) // Don't output secrets
 	fmt.Printf("\tcontainer_name:\t\t%s\n", subs[stackSub]) // Container name matches target sub GUID
 	fmt.Printf("\tkey:\t\t\t%s\n", stateKey)
 	fmt.Printf("\tstorage_account:\t%s\n", viper.GetString("azure.state.storageAccount"))
 
 	// Run the initialisation
 	cmdInit := exec.Command("terraform", "init",
-		fmt.Sprintf("--backend-config=access_key=%s", saKeys[0].Value),
+		fmt.Sprintf("--backend-config=access_key=%s", saKey),
 		fmt.Sprintf("--backend-config=container_name=%s", subs[stackSub]),
 		fmt.Sprintf("--backend-config=key=%s", stateKey),
 		fmt.Sprintf("--backend-config=storage_account_name=%s", viper.GetString("azure.state.storageAccount")))
 
-	var wg sync.WaitGroup
-
-	stdout, errOut := cmdInit.StdoutPipe()
-	if errOut != nil {
-		panic(errOut)
-	}
-	stderr, errErr := cmdInit.StderrPipe()
-	if errErr != nil {
-		panic(errErr)
-	}
-	errStart := cmdInit.Start()
-	if errStart != nil {
-		panic(errStart)
-	}
-
-	chPrint := make(chan string)
-
-	scanOut := bufio.NewScanner(stdout)
-	wg.Add(1)
-	go func() {
-		for scanOut.Scan() {
-			chPrint <- scanOut.Text()
-		}
-		wg.Done()
-	}()
-
-	scanErr := bufio.NewScanner(stderr)
-	wg.Add(1)
-	go func() {
-		for scanErr.Scan() {
-			chPrint <- scanErr.Text()
-		}
-		wg.Done()
-	}()
-
-	var exitStatus int
-
-	go func() {
-		errWait := cmdInit.Wait()
-		if errWait != nil {
-			if exitErr, ok := errWait.(*exec.ExitError); ok {
-				if status, ok := exitErr.Sys().(syscall.WaitStatus); ok {
-					exitStatus = status.ExitStatus()
-					log.Printf("Exit status: %d", exitStatus)
-				}
-			} else {
-				panic(errWait)
-			}
-		}
-		wg.Wait()
-		close(chPrint)
-	}()
-
-	for line := range chPrint {
-		fmt.Println(line)
-	}
-
-	os.Exit(exitStatus)
+	run(cmdInit)
 }

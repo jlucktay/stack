@@ -7,10 +7,11 @@ import (
 	"strings"
 
 	"github.com/google/go-github/v27/github"
-	"github.com/jlucktay/stack/pkg/common"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
+
+	"github.com/jlucktay/stack/pkg/common"
 )
 
 // issue flow:
@@ -20,17 +21,7 @@ import (
 
 func createIssue(text ...string) {
 	// 0
-	stackPath, errStackPath := common.GetStackPath(
-		viper.GetString("stackPrefix"),
-		fmt.Sprintf(
-			"github.com/%s/%s",
-			viper.GetString("github.org"),
-			viper.GetString("github.repo"),
-		),
-	)
-	if errStackPath != nil {
-		panic(errStackPath)
-	}
+	stackPath := common.MustGetStackPath()
 
 	// 1
 	ctx := context.Background()

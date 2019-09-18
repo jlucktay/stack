@@ -25,7 +25,22 @@ const yeahNah = `
 // 3. send request to API
 // 4. print URL of build from API result
 
+//nolint
 func StackQueue(branch, targets string, defID uint) {
+	buildQueueing := fmt.Sprintf("Queueing build def %d from branch '%s' ", defID, branch)
+
+	if len(targets) == 0 {
+		buildQueueing += "for all available Terraform targets.\n"
+	} else {
+		buildQueueing += "scoped to the following Terraform target(s):\n"
+
+		for _, targ := range strings.Split(targets, ";") {
+			buildQueueing += fmt.Sprintf(" - %s\n", targ)
+		}
+	}
+
+	log.Println(buildQueueing)
+
 	// 0.1
 	unpushedRaw, errExec := exec.Command("git", "rev-list", "--count", "@{u}..").Output()
 	if errExec != nil {
@@ -44,17 +59,7 @@ func StackQueue(branch, targets string, defID uint) {
 	}
 
 	// 1
-	stackPath, errStackPath := GetStackPath(
-		viper.GetString("stackPrefix"),
-		fmt.Sprintf(
-			"github.com/%s/%s",
-			viper.GetString("github.org"),
-			viper.GetString("github.repo"),
-		),
-	)
-	if errStackPath != nil {
-		panic(errStackPath)
-	}
+	stackPath := MustGetStackPath()
 
 	// 2
 	parameters := make(map[string]string)

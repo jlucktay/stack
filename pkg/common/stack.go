@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
 // GetStackPath will split the current working directory on 'prefix' and then check if it is part of a git repository
@@ -26,6 +28,22 @@ func GetStackPath(prefix, remote string) (string, error) {
 	}
 
 	return xwd[1], nil
+}
+
+func MustGetStackPath() string {
+	stackPath, errStackPath := GetStackPath(
+		viper.GetString("stackPrefix"),
+		fmt.Sprintf(
+			"github.com/%s/%s",
+			viper.GetString("github.org"),
+			viper.GetString("github.repo"),
+		),
+	)
+	if errStackPath != nil {
+		panic(errStackPath)
+	}
+
+	return stackPath
 }
 
 // validateGitRemotes takes a string argument and searches for it in all remotes that the current git repository
