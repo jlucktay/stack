@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/url"
 	"strings"
 
@@ -30,7 +29,7 @@ func createIssue(text ...string) {
 		),
 	)
 	if errStackPath != nil {
-		log.Fatal(errStackPath)
+		panic(errStackPath)
 	}
 
 	// 1
@@ -57,13 +56,13 @@ func createIssue(text ...string) {
 		issueRequest,
 	)
 	if errCreate != nil {
-		log.Fatal(errors.Wrap(errCreate, "errCreate!\n"))
+		panic(errors.Wrap(errCreate, "errCreate!\n"))
 	}
 
 	// 2
 	newIssue, errParse := url.Parse(issue.GetHTMLURL())
 	if errParse != nil {
-		log.Fatal(errors.Wrap(errParse, "errParse!\n"))
+		panic(errors.Wrap(errParse, "errParse!\n"))
 	}
 
 	fmt.Printf("New issue: %s\n", newIssue)

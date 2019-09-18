@@ -16,6 +16,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+//nolint
 func initStack() {
 	stackPath, errStackPath := common.GetStackPath(
 		viper.GetString("stackPrefix"),
@@ -26,7 +27,7 @@ func initStack() {
 		),
 	)
 	if errStackPath != nil {
-		log.Fatal(errStackPath)
+		panic(errStackPath)
 	}
 
 	xStack := strings.Split(stackPath, string(os.PathSeparator))

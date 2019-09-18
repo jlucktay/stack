@@ -17,6 +17,7 @@ var (
 	version, commit, date, builtBy string
 )
 
+//nolint
 func main() {
 	viper.SetConfigName("stack.config") // Name of config file, without extension.
 	viper.SetConfigType("json")
