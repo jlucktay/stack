@@ -11,12 +11,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Take ldflags from GoReleaser
-var (
-	//nolint
-	version, commit, date, builtBy string
-)
-
 //nolint
 func main() {
 	viper.SetConfigName("stack.config") // Name of config file, without extension.
@@ -79,15 +73,6 @@ func main() {
 		fmt.Fprintf(flag.CommandLine.Output(), "issueCommand.Usage: just give me some words!\n")
 	}
 
-	// Set up 'version' subcommand
-	versionCommand := flag.NewFlagSet("version", flag.ExitOnError)
-	versionCommand.Usage = func() {
-		fmt.Fprintf(
-			flag.CommandLine.Output(),
-			"stack v%s from commit %s, built %s by %s.\n",
-			version, commit, date, builtBy)
-	}
-
 	// Check which subcommand was given, and parse accordingly
 	if len(os.Args) < 2 {
 		flag.Usage()
@@ -121,9 +106,6 @@ func main() {
 			log.Fatalf("No issue text was given!")
 		}
 		createIssue(os.Args[2:]...)
-	case versionCommand.Name():
-		versionCommand.Usage()
-		os.Exit(0)
 	default:
 		fmt.Printf("'%v' is not a valid command.\n", os.Args[1])
 		flag.Usage()

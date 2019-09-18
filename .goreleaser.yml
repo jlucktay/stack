@@ -9,11 +9,8 @@ builds:
     env:
       - CGO_ENABLED=0
 
-    # # Custom ldflags templates.
-    # # Default is `-s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}} -X main.builtBy=goreleaser`.
-    # ldflags:
-    #  - -s -w -X main.build={{.Version}}
-    #  - ./usemsan=-msan
+    ldflags:
+      - -s -w -X github.com/jlucktay/stack/pkg/version.version={{.Version}} -X github.com/jlucktay/stack/pkg/version.commit={{.ShortCommit}} -X github.com/jlucktay/stack/pkg/version.date={{.Date}} -X github.com/jlucktay/stack/pkg/version.builtBy=goreleaser
 
 archives:
   - replacements:
