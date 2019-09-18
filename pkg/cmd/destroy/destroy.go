@@ -4,6 +4,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	"github.com/jlucktay/stack/pkg/common"
+	"github.com/jlucktay/stack/pkg/internal/util"
 )
 
 // NewCommand returns the destroy command.
@@ -12,25 +16,36 @@ func NewCommand() *cobra.Command {
 		Use:   "destroy",
 		Short: "Queue a plan to destroy this Terraform stack",
 		Long: `A longer description that spans multiple lines and likely contains examples
-		and usage of using your command. For example:
+and usage of using your command. For example:
 
-		Cobra is a CLI library for Go that empowers applications.
-		This application is a tool to generate the needed files
-		to quickly create a Cobra application.`,
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("destroy called")
+			fmt.Printf("'%s' called, with extraneous args: %s\n", cmd.CalledAs(), args)
+
+			branch, errBranch := cmd.Flags().GetString("branch")
+			if errBranch != nil {
+				panic(errBranch)
+			}
+
+			target, errTarget := cmd.Flags().GetString("target")
+			if errTarget != nil {
+				panic(errTarget)
+			}
+
+			common.StackQueue(
+				branch,
+				target,
+				viper.GetUint("azureDevOps.destroyDefID"),
+			)
 		},
 	}
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// destroyCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// destroyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	c.Flags().StringP("branch", "b", util.CurrentBranch(), "If given, plan from this git branch.\n"+
+		"Defaults to the current branch.")
+	c.Flags().StringP("target", "t", "", "If given, target these specific Terraform resources only.\n"+
+		"Delimit multiple target IDs with a semi-colon ';'.")
 
 	return c
 }
