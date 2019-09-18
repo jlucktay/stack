@@ -10,7 +10,7 @@ import (
 func NewCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "issue",
-		Short: "A brief description of your command",
+		Short: "Add/update a GitHub issue for this Terraform stack",
 		Long: `A longer description that spans multiple lines and likely contains examples
 	and usage of using your command. For example:
 
@@ -34,5 +34,3 @@ func NewCommand() *cobra.Command {
 
 	return c
 }
-
-// fmt.Fprintf(flag.CommandLine.Output(), "  issue    Add/update a GitHub issue for this Terraform stack\n")
