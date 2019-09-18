@@ -5,56 +5,15 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
-	"strings"
 
 	"github.com/spf13/viper"
 )
 
 //nolint
 func main() {
-	viper.SetConfigName("stack.config") // Name of config file, without extension.
-	viper.SetConfigType("json")
-	viper.AddConfigPath("$HOME/.config/stack") // Path to look for the config file in.
-	viper.AddConfigPath(".")                   // Optionally look for config in the working directory.
-
-	errViperRead := viper.ReadInConfig() // Find and read the config file.
-	if errViperRead != nil {             // Handle errors reading the config file.
-		log.Fatalf("fatal error with config file: %s\n", errViperRead)
-	}
-
-	// Define Usage() for flags and '--help'.
-	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Available commands for '%s':\n", os.Args[0])
-		fmt.Fprintf(flag.CommandLine.Output(), "  build    Queue a plan to build this Terraform stack\n")
-		fmt.Fprintf(flag.CommandLine.Output(), "  cancel   Cancel release(s) of built/planned Terraform stack\n")
-		fmt.Fprintf(flag.CommandLine.Output(), "  destroy  Queue a plan to destroy this Terraform stack\n")
-		fmt.Fprintf(flag.CommandLine.Output(), "  init     Initialise this Terraform stack against remote state\n")
-		fmt.Fprintf(flag.CommandLine.Output(), "  issue    Add/update a GitHub issue for this Terraform stack\n")
-		fmt.Fprintf(flag.CommandLine.Output(), "  version  Show details of this binary's current version\n")
-		flag.PrintDefaults()
-	}
-
-	// Parse out current git branch for use as a default for some flags.
-	var currentBranch string
-	gitRaw, errExec := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
-	if errExec == nil {
-		currentBranch = strings.TrimSpace(string(gitRaw))
-	}
-
-	// Set up 'build' subcommand
-	buildCommand := flag.NewFlagSet("build", flag.ExitOnError)
-	buildBranch := buildCommand.String("branch", currentBranch, "If given, plan from this branch.\n"+
-		"Defaults to the current branch.")
-	buildTargets := buildCommand.String("target", "", "If given, target these specific Terraform resources only.\n"+
-		"Delimit multiple target IDs with a semi-colon ';'.")
-
-	// Set up 'cancel' subcommand
-	cancelCommand := flag.NewFlagSet("cancel", flag.ExitOnError)
-
 	// Set up 'destroy' subcommand
 	destroyCommand := flag.NewFlagSet("destroy", flag.ExitOnError)
-	destroyBranch := destroyCommand.String("branch", currentBranch, "If given, plan from this branch.\n"+
+	destroyBranch := destroyCommand.String("branch", "", "If given, plan from this branch.\n"+
 		"Defaults to the current branch.")
 	destroyTargets := destroyCommand.String("target", "", "If given, target these specific Terraform resources only.\n"+
 		"Delimit multiple target IDs with a semi-colon ';'.")
@@ -80,16 +39,6 @@ func main() {
 	}
 
 	switch os.Args[1] {
-	case buildCommand.Name():
-		// Parse and execute 'build' subcommand
-		if errParse := buildCommand.Parse(os.Args[2:]); errParse != nil {
-			log.Fatalf("error parsing build flags: %v", errParse)
-		}
-		stackQueue(*buildBranch, *buildTargets, uint(viper.GetInt("azureDevOps.buildDefID")))
-	case cancelCommand.Name():
-		if errParse := cancelCommand.Parse(os.Args[2:]); errParse != nil {
-			log.Fatalf("error parsing cancel flags: %v", errParse)
-		}
 	case destroyCommand.Name():
 		// Parse and execute 'destroy' subcommand
 		if errParse := destroyCommand.Parse(os.Args[2:]); errParse != nil {
@@ -110,19 +59,5 @@ func main() {
 		fmt.Printf("'%v' is not a valid command.\n", os.Args[1])
 		flag.Usage()
 		os.Exit(1)
-	}
-
-	// Execute on 'cancel' subcommand
-	if cancelCommand.Parsed() {
-		fmt.Println("'cancel' is not yet implemented.") // TODO
-		os.Exit(0)
-
-		if cancelCommand.NFlag() == 0 {
-			fmt.Println("Please specify one or more releases to cancel.")
-			cancelCommand.PrintDefaults()
-			os.Exit(1)
-		}
-
-		cancelCommand.Visit(func(f *flag.Flag) {})
 	}
 }
