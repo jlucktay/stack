@@ -10,7 +10,12 @@ builds:
       - CGO_ENABLED=0
 
     ldflags:
-      - -s -w -X github.com/jlucktay/stack/pkg/version.version={{.Version}} -X github.com/jlucktay/stack/pkg/version.commit={{.ShortCommit}} -X github.com/jlucktay/stack/pkg/version.date={{.Date}} -X github.com/jlucktay/stack/pkg/version.builtBy=goreleaser
+      - >
+        -s -w
+        -X github.com/jlucktay/stack/pkg/version.version={{.Version}}
+        -X github.com/jlucktay/stack/pkg/version.commit={{.ShortCommit}}
+        -X github.com/jlucktay/stack/pkg/version.date={{.Date}}
+        -X github.com/jlucktay/stack/pkg/version.builtBy=GoReleaser
 
 archives:
   - replacements:
