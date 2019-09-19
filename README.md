@@ -213,12 +213,6 @@ New issue: https://github.com/MyGitHubOrg/MyGitHubRepo/issues/1234
 - `.github.pat`: the user's personal access token for GitHub
 - `.github.repo`: the name of the repository under the organisation within GitHub
 
-## Further implementation ideas
-
-- [Cobra - A Commander for modern Go CLI interactions](https://github.com/spf13/cobra)
-- ~~[Viper - Go configuration with fangs](https://github.com/spf13/viper)~~
-- ~~[go-github - Go library for accessing the GitHub API](https://github.com/google/go-github)~~
-
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
