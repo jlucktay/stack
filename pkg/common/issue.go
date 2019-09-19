@@ -1,4 +1,4 @@
-package main
+package common
 
 import (
 	"context"
@@ -10,8 +10,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
-
-	"github.com/jlucktay/stack/pkg/common"
 )
 
 // issue flow:
@@ -19,9 +17,9 @@ import (
 // 1. send issue to GitHub with appropriate directory tag
 // 2. print the URL of the newly-created issue
 
-func createIssue(text ...string) {
+func CreateIssue(text ...string) {
 	// 0
-	stackPath := common.MustGetStackPath()
+	stackPath := MustGetStackPath()
 
 	// 1
 	ctx := context.Background()

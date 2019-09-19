@@ -1,4 +1,4 @@
-package main
+package common
 
 import (
 	"fmt"
@@ -6,14 +6,11 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/jlucktay/stack/pkg/common"
-
 	"github.com/spf13/viper"
 )
 
-//nolint
-func initStack() {
-	stackPath := common.MustGetStackPath()
+func InitStack() {
+	stackPath := MustGetStackPath()
 
 	xStack := strings.Split(stackPath, string(os.PathSeparator))
 	if len(xStack) < 2 {
