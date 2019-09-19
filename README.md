@@ -49,7 +49,7 @@ You should have a [working Go environment](https://golang.org/doc/install) and h
 To download the source, compile, and install the demo binary, run:
 
 ``` shell
-go get github.com/jlucktay/stack/...
+go get github.com/jlucktay/stack
 ```
 
 The source code will be located in `$GOPATH/src/github.com/jlucktay/stack/`.
@@ -64,8 +64,6 @@ Binary releases can be downloaded [here on GitHub](https://github.com/jlucktay/s
 
 There is a sample JSON file `stack.config.example.json` that should be copied over to your
 `$HOME/.config/stack/stack.config.json` directory and populated appropriately.
-
-**Note:** `stack` will also look in the current working directory for this configuration file.
 
 Filling out this config file will require the generation of two personal access tokens, one from Azure DevOps and one
 from GitHub. Links to the appropriate pages on each site are in the example file.
@@ -90,7 +88,8 @@ Also assume that the following values are configured:
 - `.stackPrefix` = `stack-prefix`
 
 The keys under `.azure.subscriptions` map to the first child directory underneath the directory set under
-`.stackPrefix`.
+`.stackPrefix` so the sub-directory `subscription-alias` (under `stack-prefix`) would map to the subscription with a
+GUID of `01234567-89ab-cdef-0123-456789abcdef`.
 
 For remote state storage within the storage account, the key value is made up of three components:
 
@@ -119,19 +118,20 @@ Initialising Terraform with following dynamic values:
 Some of the functionality in `stack` comes from executing other tools, which will need to be installed, configured,
 authed, and available on your `$PATH`:
 
-- [Azure CLI](https://docs.microsoft.com/cli/azure)
-- [Git](https://git-scm.com)
-- [Terraform](https://www.terraform.io)
+- [Azure CLI](https://docs.microsoft.com/cli/azure) - `az`
+- [Git](https://git-scm.com) - `git`
+- [Terraform](https://www.terraform.io) - `terraform`
 
 ## Usage
 
-`stack` has several subcommands:
+`stack` itself has several subcommands:
 
 - `init`
 - `build`
 - `destroy`
 - `cancel`
 - `issue`
+- `version`
 
 ### `stack init`
 
@@ -141,7 +141,7 @@ Initialises the current Terraform stack directory using the Azure storage accoun
 $ stack init
 Switching subscriptions... done.
 Retrieving storage account key... done.
-Switching subscriptions again... done.
+Switching subscriptions... done.
 Initialising Terraform with following dynamic values:
 ...
 ```
@@ -164,6 +164,8 @@ Queues a plan in Azure DevOps to build the Terraform stack in the current direct
 $ stack build
 Build URL: https://dev.azure.com/MyAzureDevOpsOrg/12345678-90ab-cdef-1234-567890abcdef/_build/results?buildId=1234
 ```
+
+#### `stack build` relevant config keys
 
 - `.azureDevOps.buildDefID`: the build definition ID within Azure DevOps to queue
 - `.azureDevOps.org`: the name of the organisation within Azure DevOps
@@ -209,15 +211,15 @@ $ stack issue "There's a problem with this stack!"
 New issue: https://github.com/MyGitHubOrg/MyGitHubRepo/issues/1234
 ```
 
+#### `stack issue` relevant config keys
+
 - `.github.org`: the name of the organisation within GitHub
 - `.github.pat`: the user's personal access token for GitHub
 - `.github.repo`: the name of the repository under the organisation within GitHub
 
-## Further implementation ideas
+### `stack version`
 
-- [Cobra - A Commander for modern Go CLI interactions](https://github.com/spf13/cobra)
-- ~~[Viper - Go configuration with fangs](https://github.com/spf13/viper)~~
-- ~~[go-github - Go library for accessing the GitHub API](https://github.com/google/go-github)~~
+Displays version and build information for the current `stack` binary.
 
 ## Contributing
 
