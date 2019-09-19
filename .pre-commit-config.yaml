@@ -53,7 +53,7 @@ repos:
 
   # https://github.com/golangci/golangci-lint/blob/master/.pre-commit-hooks.yaml
   - repo: git://github.com/golangci/golangci-lint
-    rev: v1.17.1
+    rev: v1.18.0
     hooks:
       - id: golangci-lint
         args: ["--enable-all"]
