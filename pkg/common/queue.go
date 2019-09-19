@@ -33,7 +33,7 @@ func StackQueue(branch, targets string, defID uint) {
 	log.Println(buildQueueing)
 
 	// 0.1
-	util.MustHaveZeroUnpushedCommits()
+	util.MustHaveZeroUnpushedCommits(branch)
 
 	// 1
 	stackPath := mustGetStackPath()
