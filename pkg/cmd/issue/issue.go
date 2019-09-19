@@ -21,15 +21,13 @@ func NewCommand() *cobra.Command {
 	This application is a tool to generate the needed files
 	to quickly create a Cobra application.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("issue called")
-
-			if len(os.Args[2:]) == 0 {
+			if len(args) == 0 {
 				fmt.Println("No issue text was given!")
 				cmd.UsageString()
 				os.Exit(1)
 			}
 
-			common.CreateIssue(os.Args[2:]...)
+			common.CreateIssue(args...)
 		},
 	}
 
