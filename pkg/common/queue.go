@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -55,7 +56,8 @@ func StackQueue(branch, targets string, defID uint) {
 		panic(errAtoi)
 	}
 	if nUnpushed > 0 {
-		panic(fmt.Sprintf("you have %d unpushed commit(s)) on the '%s' branch:\n%v", nUnpushed, branch, yeahNah))
+		fmt.Printf("You have %d unpushed commit(s) on the '%s' branch!\n%v", nUnpushed, branch, yeahNah)
+		os.Exit(1)
 	}
 
 	// 1

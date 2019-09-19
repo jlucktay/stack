@@ -3,9 +3,9 @@ package init
 import (
 	"fmt"
 
-	"github.com/jlucktay/stack/pkg/common"
-
 	"github.com/spf13/cobra"
+
+	"github.com/jlucktay/stack/pkg/common"
 )
 
 // NewCommand returns the init command.
