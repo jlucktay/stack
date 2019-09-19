@@ -19,7 +19,7 @@ import (
 
 func CreateIssue(text ...string) {
 	// 0
-	stackPath := MustGetStackPath()
+	stackPath := mustGetStackPath()
 
 	// 1
 	ctx := context.Background()

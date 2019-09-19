@@ -36,3 +36,16 @@ func mustGetStorageAccountKey() string {
 
 	return saKeys[0].Value
 }
+
+func mustSetSubscription(guid string) {
+	cmdSetAccount := exec.Command("az", "account", "set", fmt.Sprintf("--subscription=%s", guid))
+
+	fmt.Printf("Switching subscriptions... ")
+
+	errSetAccount := cmdSetAccount.Run()
+	if errSetAccount != nil {
+		panic(fmt.Sprintf("'az' errored when setting current subscription to %s: %s", guid, errSetAccount))
+	}
+
+	fmt.Println("done.")
+}

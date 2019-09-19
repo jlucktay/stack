@@ -1,8 +1,6 @@
 package init
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 
 	"github.com/jlucktay/stack/pkg/common"
@@ -20,7 +18,6 @@ func NewCommand() *cobra.Command {
 	This application is a tool to generate the needed files
 	to quickly create a Cobra application.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("init called")
 			common.InitStack()
 		},
 	}

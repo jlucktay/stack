@@ -10,7 +10,7 @@ import (
 )
 
 func InitStack() {
-	stackPath := MustGetStackPath()
+	stackPath := mustGetStackPath()
 
 	xStack := strings.Split(stackPath, string(os.PathSeparator))
 	if len(xStack) < 2 {
@@ -30,28 +30,13 @@ func InitStack() {
 	stateKey := fmt.Sprintf("%s.%s.%s", viper.GetString("azure.state.keyPrefix"), stackParent, stack)
 
 	// Switching subscriptions
-	cmdSetAccountSA := exec.Command("az", "account", "set",
-		fmt.Sprintf("--subscription=%s", viper.GetString("azure.state.subscription")))
-	fmt.Printf("Switching subscriptions... ")
-	errSetAccountSA := cmdSetAccountSA.Run()
-	if errSetAccountSA != nil {
-		panic(fmt.Sprintf("'az' errored when setting current subscription to %s: %s",
-			viper.GetString("azure.state.subscription"), errSetAccountSA))
-	}
-	fmt.Println("done.")
+	mustSetSubscription(viper.GetString("azure.state.subscription"))
 
 	// Get access key; enables programmatic access to the storage account
 	saKey := mustGetStorageAccountKey()
 
 	// Switch subscriptions to given target
-	cmdSetAccountTarget := exec.Command("az", "account", "set", fmt.Sprintf("--subscription=%s", subs[stackSub]))
-	fmt.Printf("Switching subscriptions again... ")
-	errSetAccountTarget := cmdSetAccountTarget.Run()
-	if errSetAccountTarget != nil {
-		panic(fmt.Sprintf("'az' errored when setting current subscription to %s: %s",
-			subs[stackSub], errSetAccountTarget))
-	}
-	fmt.Println("done.")
+	mustSetSubscription(subs[stackSub])
 
 	// Announce init
 	fmt.Println("Initialising Terraform with following dynamic values:")

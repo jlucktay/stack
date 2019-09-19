@@ -30,7 +30,7 @@ func GetStackPath(prefix, remote string) (string, error) {
 	return xwd[1], nil
 }
 
-func MustGetStackPath() string {
+func mustGetStackPath() string {
 	stackPath, errStackPath := GetStackPath(
 		viper.GetString("stackPrefix"),
 		fmt.Sprintf(

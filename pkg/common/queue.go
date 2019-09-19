@@ -36,7 +36,7 @@ func StackQueue(branch, targets string, defID uint) {
 	util.MustHaveZeroUnpushedCommits()
 
 	// 1
-	stackPath := MustGetStackPath()
+	stackPath := mustGetStackPath()
 
 	// 2
 	parameters := make(map[string]string)
