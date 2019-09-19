@@ -1,3 +1,5 @@
+// Package cmd contains the root of the CLI command section of our migration support tool, 'stack', which leverages
+// logic from other packages stored elsewhere in the repo.
 package cmd
 
 import (
@@ -62,9 +64,9 @@ pipelines, primarily to avoid the sluggish and generally awful UI of the latter.
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
 	// Find home directory.
-	home, err := homedir.Dir()
-	if err != nil {
-		fmt.Println(err)
+	home, errHome := homedir.Dir()
+	if errHome != nil {
+		fmt.Println(errHome)
 		os.Exit(1)
 	}
 
