@@ -14,12 +14,15 @@ func NewQueueCommand(defType string) *cobra.Command {
 	c := &cobra.Command{
 		Use:   defType,
 		Short: fmt.Sprintf("Queue a plan to %s this Terraform stack", defType),
-		Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+		Long: fmt.Sprintf(`This command queues a build on Azure DevOps to %s this Terraform stack.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Configured values for the Azure DevOps project, organisation, PAT, and build
+definition ID are all used, as well as the stack prefix value to compose the
+key of the Terraform state file within the Azure storage account.
+
+Example usage:
+$ stack %[1]s --branch feature/new-stack --target "azurerm_virtual_machine.example;azurerm_resource_group.example"
+Stack (plan) URL: https://dev.azure.com/Org/Project/_build/results?buildId=1234`, defType),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Printf("'%s' called, with extraneous args: %s\n", cmd.CalledAs(), args)
 

@@ -81,11 +81,23 @@ Assume - for this example's sake - that the working directory is as follows:
 
 Also assume that the following values are configured:
 
-- `.azure.state.storageAccount` = `mytfstatestorage`
-- `.azure.subscriptions.subscription-alias` = `01234567-89ab-cdef-0123-456789abcdef`
-- `.github.org` = `MyGitHubOrg`
-- `.github.repo` = `MyGitHubRepo`
-- `.stackPrefix` = `stack-prefix`
+``` json
+{
+  "azure": {
+    "state": {
+      "storageAccount": "mytfstatestorage"
+    },
+    "subscriptions": {
+      "subscription-alias": "01234567-89ab-cdef-0123-456789abcdef"
+    }
+  },
+  "github": {
+    "org": "MyGitHubOrg",
+    "repo": "MyGitHubRepo"
+  },
+  "stackPrefix": "stack-prefix"
+}
+```
 
 The keys under `.azure.subscriptions` map to the first child directory underneath the directory set under
 `.stackPrefix` so the sub-directory `subscription-alias` (under `stack-prefix`) would map to the subscription with a
@@ -105,7 +117,7 @@ $ pwd
 $ stack init
 Switching subscriptions... done.
 Retrieving storage account key... done.
-Switching subscriptions again... done.
+Switching subscriptions... done.
 Initialising Terraform with following dynamic values:
         container_name:         01234567-89ab-cdef-0123-456789abcdef
         key:                    stack-prefix.three.my-stack
@@ -148,13 +160,23 @@ Initialising Terraform with following dynamic values:
 
 #### `stack init` relevant config keys
 
-- `.azure.state.keyPrefix`: the first of three segments that will make up the blob name for the Terraform backend state
-in the Azure storage account
-- `.azure.state.storageAccount`: the name of the storage account in Azure where Terraform stores state
-- `.azure.state.subscription`: the GUID of the Azure subscription holding the Terraform state storage account
-- `.azure.subscriptions.*`: populate this object with all relevant subscriptions, where the key is the name to map to
-the directory structure of the Terraform stack, and the value is the GUID of said subscription
-- `.stackPrefix`: the name of the parent directory holding all of the Terraform stacks
+``` json
+{
+  "azure": {
+    "state": {
+      "keyPrefix": "first of three segments for key names of state files within blob storage",
+      "storageAccount": "name of Azure storage account where Terraform state is stored",
+      "subscription": "GUID of Azure subscription holding the state storage account"
+    },
+    "subscriptions": {
+      "a stack under '/<stackPrefix>/<this key>/<a stack name>/'": "will map to subscription associated with <this key>",
+      "exampleSubName": "subscription GUIDs go here",
+      "this key will be matched to a parent directory": "this value will map said directory to a specific subscription"
+    }
+  },
+  "stackPrefix": "/some/segment/of/repo/directory/structure/"
+}
+```
 
 ### `stack build`
 
@@ -162,16 +184,22 @@ Queues a plan in Azure DevOps to build the Terraform stack in the current direct
 
 ``` bash
 $ stack build
-Build URL: https://dev.azure.com/MyAzureDevOpsOrg/12345678-90ab-cdef-1234-567890abcdef/_build/results?buildId=1234
+Stack (plan) URL: https://dev.azure.com/MyAzureDevOpsOrg/12345678-90ab-cdef-1234-567890abcdef/_build/results?buildId=1234
 ```
 
 #### `stack build` relevant config keys
 
-- `.azureDevOps.buildDefID`: the build definition ID within Azure DevOps to queue
-- `.azureDevOps.org`: the name of the organisation within Azure DevOps
-- `.azureDevOps.pat`: the user's personal access token for Azure DevOps
-- `.azureDevOps.project`: the name of the project under the organisation within Azure DevOps
-- `.stackPrefix`: the name of the parent directory holding all of the Terraform stacks
+``` json
+{
+  "azureDevOps": {
+    "buildDefID": 5, // the build definition ID within Azure DevOps to queue
+    "org": "the name of the organisation within Azure DevOps",
+    "pat": "52 character alphanumeric, generated here: https://dev.azure.com/<org>/_usersSettings/tokens",
+    "project": "the name of the project under the organisation within Azure DevOps"
+  },
+  "stackPrefix": "/some/segment/of/repo/directory/structure/"
+}
+```
 
 #### `stack build` optional arguments
 
@@ -200,7 +228,7 @@ the singular difference being that this subcommand references `.azureDevOps.dest
 
 Cancels any pending releases in Azure DevOps.
 
-**Coming soon!**
+**Not yet implemented; coming soon!**
 
 ### `stack issue`
 
@@ -213,9 +241,15 @@ New issue: https://github.com/MyGitHubOrg/MyGitHubRepo/issues/1234
 
 #### `stack issue` relevant config keys
 
-- `.github.org`: the name of the organisation within GitHub
-- `.github.pat`: the user's personal access token for GitHub
-- `.github.repo`: the name of the repository under the organisation within GitHub
+``` json
+{
+  "github": {
+    "org": "the name of the organisation within GitHub",
+    "pat": "<40 character hexadecimal, generated here: https://github.com/settings/tokens>",
+    "repo": "the name of the repository under the organisation within GitHub"
+  }
+}
+```
 
 ### `stack version`
 
