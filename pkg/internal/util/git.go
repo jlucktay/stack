@@ -12,6 +12,8 @@ func CurrentBranch() (s string) {
 	gitRaw, errExec := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
 	if errExec == nil {
 		s = strings.TrimSpace(string(gitRaw))
+	} else {
+		panic(errExec)
 	}
 	return
 }
