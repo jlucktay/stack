@@ -13,23 +13,36 @@ import (
 func NewCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "issue",
-		Short: "Add/update a GitHub issue for this Terraform stack",
-		Long: `A longer description that spans multiple lines and likely contains examples
-	and usage of using your command. For example:
+		Short: "Add a GitHub issue for this Terraform stack",
+		Long: `Creates an issue in the configured GitHub org/repo using the provided PAT.
 
-	Cobra is a CLI library for Go that empowers applications.
-	This application is a tool to generate the needed files
-	to quickly create a Cobra application.`,
+The 'title' flag for this subcommand is optional.
+
+Example usage:
+$ stack issue --title "My issue title" I found a problem with this stack
+
+The above command would create a new issue in the configured GitHub org/repo
+titled "My issue title" with body text of "I found a problem with this stack".`,
 		Run: func(cmd *cobra.Command, args []string) {
+			title, errTitle := cmd.Flags().GetString("title")
+			if errTitle != nil {
+				panic(errTitle)
+			}
+			if title == "" {
+				title = "New issue"
+			}
+
 			if len(args) == 0 {
 				fmt.Println("No issue text was given!")
 				cmd.UsageString()
 				os.Exit(1)
 			}
 
-			common.CreateIssue(args...)
+			common.CreateIssue(title, args...)
 		},
 	}
+
+	c.Flags().StringP("title", "t", "", "If given, title the issue with this string.")
 
 	return c
 }
