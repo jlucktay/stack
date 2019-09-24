@@ -14,14 +14,15 @@ import (
 
 // issue flow:
 // 0. get current stack directory
+// 0.1. get current GitHub username
 // 1. send issue to GitHub with appropriate directory tag
 // 2. print the URL of the newly-created issue
 
-func CreateIssue(text ...string) {
+func CreateIssue(title string, text ...string) {
 	// 0
 	stackPath := mustGetStackPath()
 
-	// 1
+	// set up GitHub auth
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{
@@ -31,11 +32,17 @@ func CreateIssue(text ...string) {
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
+	// 0.1
+	assignee := mustGetCurrentGitHubLogin(client)
+
+	// 1
 	issueRequest := &github.IssueRequest{
-		Title: github.String(strings.Join(text, " ")),
+		Title: &title,
+		Body:  github.String(strings.Join(text, " ")),
 		Labels: &[]string{
 			stackPath,
 		},
+		Assignee: &assignee,
 	}
 
 	issue, _, errCreate := client.Issues.Create(
