@@ -192,7 +192,7 @@ Stack (plan) URL: https://dev.azure.com/MyAzureDevOpsOrg/12345678-90ab-cdef-1234
 ``` json
 {
   "azureDevOps": {
-    "buildDefID": 5, // the build definition ID within Azure DevOps to queue
+    "buildDefID": 5,
     "org": "the name of the organisation within Azure DevOps",
     "pat": "52 character alphanumeric, generated here: https://dev.azure.com/<org>/_usersSettings/tokens",
     "project": "the name of the project under the organisation within Azure DevOps"
@@ -232,10 +232,17 @@ Cancels any pending releases in Azure DevOps.
 
 ### `stack issue`
 
-Creates an issue in GitHub with a label referring to the current Terraform stack directory.
+Creates an issue in GitHub with a label referring to the current Terraform stack directory, and assigned to the
+current user.
+
+The issue's body text is gathered by way of an interactive editor, designated by the current environment's `EDITOR`
+variable.
 
 ``` bash
-$ stack issue "There's a problem with this stack!"
+$ stack issue -t "There's a problem with this stack!"
+...
+($EDITOR is launched to gather issue body)
+...
 New issue: https://github.com/MyGitHubOrg/MyGitHubRepo/issues/1234
 ```
 
