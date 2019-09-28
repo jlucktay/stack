@@ -4,12 +4,13 @@ import (
 	"context"
 	"fmt"
 	"net/url"
-	"strings"
 
 	"github.com/google/go-github/v27/github"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
+
+	"github.com/jlucktay/stack/pkg/cli"
 )
 
 // issue flow:
@@ -18,7 +19,7 @@ import (
 // 1. send issue to GitHub with appropriate directory tag
 // 2. print the URL of the newly-created issue
 
-func CreateIssue(title string, text ...string) {
+func CreateIssue(title string) {
 	// 0
 	stackPath := mustGetStackPath()
 
@@ -36,9 +37,17 @@ func CreateIssue(title string, text ...string) {
 	assignee := mustGetCurrentGitHubLogin(client)
 
 	// 1
+	inputBytes, errInput := cli.CaptureInputFromEditor(
+		cli.GetPreferredEditorFromEnvironment,
+	)
+	if errInput != nil {
+		panic(errors.Wrap(errInput, "errInput!\n"))
+	}
+	body := string(inputBytes)
+
 	issueRequest := &github.IssueRequest{
 		Title: &title,
-		Body:  github.String(strings.Join(text, " ")),
+		Body:  &body,
 		Labels: &[]string{
 			stackPath,
 		},
