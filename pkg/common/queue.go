@@ -17,6 +17,11 @@ import (
 // 3. send request to API
 // 4. print URL of build from API result
 
+const (
+	azureTargetDelimiter = ";"
+	targetArgDelimiter   = ","
+)
+
 func StackQueue(branch, targets string, defID uint) {
 	buildQueueing := fmt.Sprintf("Queueing build def %d from branch '%s' ", defID, branch)
 
@@ -25,7 +30,7 @@ func StackQueue(branch, targets string, defID uint) {
 	} else {
 		buildQueueing += "scoped to the following Terraform target(s):\n"
 
-		for _, targ := range strings.Split(targets, ";") {
+		for _, targ := range strings.Split(targets, targetArgDelimiter) {
 			buildQueueing += fmt.Sprintf(" - %s\n", targ)
 		}
 	}
@@ -43,7 +48,8 @@ func StackQueue(branch, targets string, defID uint) {
 	parameters["StackPath"] = stackPath
 
 	if len(targets) > 0 {
-		parameters["TerraformTarget"] = targets
+		xTargets := strings.Split(targets, targetArgDelimiter)
+		parameters["TerraformTarget"] = strings.Join(xTargets, azureTargetDelimiter)
 	}
 
 	payload, errPayload := GetPostPayload(defID, parameters, branch)
