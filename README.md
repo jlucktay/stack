@@ -209,11 +209,11 @@ If given, build from this branch. Defaults to the current branch.
 
 ##### `--target`
 
-If given, target these specific Terraform resources only. Delimit multiple target IDs with a semi-colon ';'.
+If given, target these specific Terraform resources only. Delimit multiple target IDs with a comma `,`.
 For example:
 
 ``` bash
-stack build --target="azurerm_resource_group.main;azurerm_virtual_machine.app;azurerm_virtual_machine.database"
+stack build --target="azurerm_resource_group.main,azurerm_virtual_machine.app,azurerm_virtual_machine.database"
 ```
 
 ### `stack destroy`
@@ -228,7 +228,7 @@ the singular difference being that this subcommand references `.azureDevOps.dest
 
 Cancels any pending releases in Azure DevOps.
 
-**Not yet implemented; coming soon!**
+**Not yet implemented - coming soon!**
 
 ### `stack issue`
 
