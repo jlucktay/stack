@@ -29,14 +29,8 @@ func InitStack() {
 	stack := xStack[len(xStack)-1]
 	stateKey := fmt.Sprintf("%s.%s.%s", viper.GetString("azure.state.keyPrefix"), stackParent, stack)
 
-	// Switching subscriptions
-	mustSetSubscription(viper.GetString("azure.state.subscription"))
-
 	// Get access key; enables programmatic access to the storage account
 	saKey := mustGetStorageAccountKey()
-
-	// Switch subscriptions to given target
-	mustSetSubscription(subs[stackSub])
 
 	// Announce init
 	fmt.Println("Initialising Terraform with following dynamic values:")

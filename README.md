@@ -130,7 +130,6 @@ Initialising Terraform with following dynamic values:
 Some of the functionality in `stack` comes from executing other tools, which will need to be installed, configured,
 authed, and available on your `$PATH`:
 
-- [Azure CLI](https://docs.microsoft.com/cli/azure) - `az`
 - [Git](https://git-scm.com) - `git`
 - [Terraform](https://www.terraform.io) - `terraform`
 
@@ -165,6 +164,7 @@ Initialising Terraform with following dynamic values:
   "azure": {
     "state": {
       "keyPrefix": "first of three segments for key names of state files within blob storage",
+      "resourceGroup": "name of resource group on Azure which contains the storage account",
       "storageAccount": "name of Azure storage account where Terraform state is stored",
       "subscription": "GUID of Azure subscription holding the state storage account"
     },
