@@ -24,10 +24,15 @@ func CreateIssue(title string) {
 	stackPath := mustGetStackPath()
 
 	// set up GitHub auth
+	ghPATKey := "github.pat"
+	if !viper.IsSet(ghPATKey) {
+		panic("the GitHub personal access token has not been specified under '" + ghPATKey + "' in your config")
+	}
+
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{
-			AccessToken: viper.GetString("github.pat"),
+			AccessToken: viper.GetString(ghPATKey),
 		},
 	)
 	tc := oauth2.NewClient(ctx, ts)
@@ -54,12 +59,16 @@ func CreateIssue(title string) {
 		Assignee: &assignee,
 	}
 
-	issue, _, errCreate := client.Issues.Create(
-		ctx,
-		viper.GetString("github.org"),
-		viper.GetString("github.repo"),
-		issueRequest,
-	)
+	ghOrgKey := "github.org"
+	if !viper.IsSet(ghOrgKey) {
+		panic("the GitHub organisation has not been specified under '" + ghOrgKey + "' in your config")
+	}
+	ghRepoKey := "github.repo"
+	if !viper.IsSet(ghRepoKey) {
+		panic("the GitHub repository has not been specified under '" + ghRepoKey + "' in your config")
+	}
+
+	issue, _, errCreate := client.Issues.Create(ctx, viper.GetString(ghOrgKey), viper.GetString(ghRepoKey), issueRequest)
 	if errCreate != nil {
 		panic(errors.Wrap(errCreate, "errCreate!\n"))
 	}

@@ -36,10 +36,16 @@ Stack (plan) URL: https://dev.azure.com/Org/Project/_build/results?buildId=1234`
 				panic(errTarget)
 			}
 
+			defIDKey := fmt.Sprintf("azureDevOps.%sDefID", defType)
+			if !viper.IsSet(defIDKey) {
+				panic("build definition ID (" + defType + ") has not been specified under key '" +
+					defIDKey + "' in your config")
+			}
+
 			common.StackQueue(
 				branch,
 				target,
-				viper.GetUint(fmt.Sprintf("azureDevOps.%sDefID", defType)),
+				viper.GetUint(defIDKey),
 			)
 		},
 	}

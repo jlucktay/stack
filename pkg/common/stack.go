@@ -31,12 +31,26 @@ func GetStackPath(prefix, remote string) (string, error) {
 }
 
 func mustGetStackPath() string {
+	spKey := "stackPrefix"
+	if !viper.IsSet(spKey) {
+		panic("the stack path prefix has not been specified under '" + spKey + "' in your config")
+	}
+
+	ghOrgKey := "github.org"
+	if !viper.IsSet(ghOrgKey) {
+		panic("the GitHub organisation has not been specified under '" + ghOrgKey + "' in your config")
+	}
+	ghRepoKey := "github.repo"
+	if !viper.IsSet(ghRepoKey) {
+		panic("the GitHub repository has not been specified under '" + ghRepoKey + "' in your config")
+	}
+
 	stackPath, errStackPath := GetStackPath(
-		viper.GetString("stackPrefix"),
+		viper.GetString(spKey),
 		fmt.Sprintf(
 			"github.com/%s/%s",
-			viper.GetString("github.org"),
-			viper.GetString("github.repo"),
+			viper.GetString(ghOrgKey),
+			viper.GetString(ghRepoKey),
 		),
 	)
 	if errStackPath != nil {
