@@ -61,7 +61,13 @@ pipelines, primarily to avoid the sluggish and generally awful UI of the latter.
 	}
 }
 
-// initConfig reads in config file and ENV variables if set.
+const (
+	viperConfigName = "stack.config"
+	viperConfigType = "json"
+	viperConfigFile = viperConfigName + "." + viperConfigType
+)
+
+// initConfig reads in a config file from a preference order of search paths, and also environment variables if set.
 func initConfig() {
 	// Find home directory.
 	home, errHome := homedir.Dir()
@@ -70,16 +76,43 @@ func initConfig() {
 		os.Exit(1)
 	}
 
-	viper.AddConfigPath(filepath.Join(home, ".config/stack"))
-	viper.SetConfigName("stack.config") // Name of config file, without extension.
-	viper.SetConfigType("json")
+	// Name of config file, and extension.
+	viper.SetConfigName(viperConfigName)
+	viper.SetConfigType(viperConfigType)
 
-	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if errViperRead := viper.ReadInConfig(); errViperRead == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	} else {
-		panic(fmt.Sprintf("Fatal error reading config file '%s':\n%s\n", viper.ConfigFileUsed(), errViperRead))
+	// Paths to search (in descending order of preference) for the config file.
+	configPaths := []string{
+		".",
+		filepath.Join(home, ".config/stack"),
+		"/etc/stack",
 	}
+
+	for _, configPath := range configPaths {
+		viper.AddConfigPath(configPath)
+	}
+
+	// Read in environment variables that match.
+	viper.AutomaticEnv()
+
+	if errViperRead := viper.ReadInConfig(); errViperRead != nil {
+		if _, ok := errViperRead.(viper.ConfigFileNotFoundError); ok {
+			fmt.Printf("Could not find a config file named '%s' at any of these paths:\n", viperConfigFile)
+
+			for _, configPath := range configPaths {
+				abs, errAbs := filepath.Abs(configPath)
+				if errAbs != nil {
+					panic(errAbs)
+				}
+
+				fmt.Printf("- %s/%s\n", abs, viperConfigFile)
+			}
+
+			fmt.Println("\nPlease see the README for details about the configuration file.")
+			os.Exit(1)
+		} else {
+			panic(fmt.Sprintf("Fatal error reading config file '%s':\n%s\n", viper.ConfigFileUsed(), errViperRead))
+		}
+	}
+
+	fmt.Println("Using config file:", viper.ConfigFileUsed())
 }

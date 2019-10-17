@@ -62,8 +62,14 @@ Binary releases can be downloaded [here on GitHub](https://github.com/jlucktay/s
 
 ## Configuration
 
-There is a sample JSON file `stack.config.example.json` that should be copied over to your
-`$HOME/.config/stack/stack.config.json` directory and populated appropriately.
+There is a sample JSON file named `stack.config.example.json` here in the root of this repo.
+
+The search order that `stack` follows when looking for the fully populated `stack.config.json` config file is as
+follows:
+
+1. `<current working directory>/stack.config.json`
+1. `$HOME/.config/stack/stack.config.json`
+1. `/etc/stack/stack.config.json`
 
 Filling out this config file will require the generation of two personal access tokens, one from Azure DevOps and one
 from GitHub. Links to the appropriate pages on each site are in the example file.
