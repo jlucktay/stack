@@ -62,10 +62,12 @@ func StackQueue(branch, targets string, defID uint) {
 	if !viper.IsSet(adoOrgKey) {
 		panic("the Azure DevOps organisation has not been specified under '" + adoOrgKey + "' in your config")
 	}
+
 	adoProjectKey := "azureDevOps.project"
 	if !viper.IsSet(adoProjectKey) {
 		panic("the Azure Devops project has not been specified under '" + adoProjectKey + "' in your config")
 	}
+
 	adoPATKey := "azureDevOps.pat"
 	if !viper.IsSet(adoPATKey) {
 		panic("the Azure DevOps personal access token has not been specified under '" + adoPATKey + "' in your config")
@@ -76,6 +78,7 @@ func StackQueue(branch, targets string, defID uint) {
 		viper.GetString(adoOrgKey),
 		viper.GetString(adoProjectKey),
 	)
+
 	apiResult, errAPI := SendBuildRequest(apiURL, viper.GetString(adoPATKey), payload)
 	if errAPI != nil {
 		panic(errAPI)

@@ -17,19 +17,22 @@ func run(cmd *exec.Cmd) {
 	if errOut != nil {
 		panic(errOut)
 	}
+
 	stderr, errErr := cmd.StderrPipe()
 	if errErr != nil {
 		panic(errErr)
 	}
+
 	errStart := cmd.Start()
 	if errStart != nil {
 		panic(errStart)
 	}
 
 	chPrint := make(chan string)
-
 	scanOut := bufio.NewScanner(stdout)
+
 	wg.Add(1)
+
 	go func() {
 		for scanOut.Scan() {
 			chPrint <- scanOut.Text()
@@ -38,7 +41,9 @@ func run(cmd *exec.Cmd) {
 	}()
 
 	scanErr := bufio.NewScanner(stderr)
+
 	wg.Add(1)
+
 	go func() {
 		for scanErr.Scan() {
 			chPrint <- scanErr.Text()

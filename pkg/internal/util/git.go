@@ -21,10 +21,10 @@ func CurrentBranch() (s string) {
 func MustHaveZeroUnpushedCommits(targetBranch string) {
 	local := mustGetCommitHash(targetBranch)
 	remote := mustGetCommitHash("origin/" + targetBranch)
+	commitRange := fmt.Sprintf("%s...%s", remote, local)
 
 	rawCommitCount, errLog := exec.Command(
-		"git", "log", "--pretty=oneline",
-		fmt.Sprintf("%s...%s", remote, local),
+		"git", "log", "--pretty=oneline", commitRange,
 	).CombinedOutput()
 
 	if errLog != nil {
@@ -54,6 +54,7 @@ func mustGetCommitHash(branch string) string {
 		fmt.Printf("Error parsing branch ref '%s':\n%s\n", branch, rawHash)
 		panic(errRevParse)
 	}
+
 	return strings.TrimSpace(string(rawHash))
 }
 

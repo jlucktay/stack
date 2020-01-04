@@ -48,8 +48,8 @@ func CreateIssue(title string) {
 	if errInput != nil {
 		panic(errors.Wrap(errInput, "errInput!\n"))
 	}
-	body := string(inputBytes)
 
+	body := string(inputBytes)
 	issueRequest := &github.IssueRequest{
 		Title: &title,
 		Body:  &body,
@@ -63,6 +63,7 @@ func CreateIssue(title string) {
 	if !viper.IsSet(ghOrgKey) {
 		panic("the GitHub organisation has not been specified under '" + ghOrgKey + "' in your config")
 	}
+
 	ghRepoKey := "github.repo"
 	if !viper.IsSet(ghRepoKey) {
 		panic("the GitHub repository has not been specified under '" + ghRepoKey + "' in your config")
