@@ -9,57 +9,49 @@ import (
 	"syscall"
 )
 
-// CurrentBranch parses out the current git branch, if we are inside a git repo.
+// CurrentBranch parses out the name of the current git branch, if we are inside a git repo.
 // Otherwise, an empty string is returned.
-func CurrentBranch() (s string) {
+func CurrentBranch() string {
 	cmdGit := exec.Command("git", "rev-parse", "--is-inside-work-tree")
-	gitRaw, errExec := cmdGit.Output()
+	_, errRepoTest := cmdGit.Output()
 
 	// With thanks to:
 	// https://stackoverflow.com/questions/10385551/get-exit-code-go
-	if errExec != nil {
-		if errExit, ok := errExec.(*exec.ExitError); ok {
+	if errRepoTest != nil {
+		if errExit, ok := errRepoTest.(*exec.ExitError); ok {
 			// The program has exited with an exit code != 0
-			//
-			// This works on both Unix and Windows. Although package
-			// syscall is generally platform dependent, WaitStatus is
-			// defined for both Unix and Windows and in both cases has
-			// an ExitStatus() method with the same signature.
 			if status, ok := errExit.Sys().(syscall.WaitStatus); ok {
-				exitCode := status.ExitStatus()
-				if exitCode == 128 {
-					return
+				exitStatus := status.ExitStatus()
+				if exitStatus == 128 {
+					return ""
 				}
 
-				log.Fatalf("'%+v' exit code: %d", cmdGit, exitCode)
+				log.Fatalf("'%+v' exit code: %d", cmdGit, exitStatus)
 			}
-		} else {
-			log.Fatalf("'%+v': %+v", cmdGit, errExec)
 		}
+
+		log.Fatalf("'%+v': %+v", cmdGit, errRepoTest)
 	}
 
-	s = strings.TrimSpace(string(gitRaw))
+	gitRaw, errBranch := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
+	if errBranch != nil {
+		panic(errBranch)
+	}
 
-	return
+	return strings.TrimSpace(string(gitRaw))
 }
 
 func MustHaveZeroUnpushedCommits(targetBranch string) {
 	local := mustGetCommitHash(targetBranch)
 	remote := mustGetCommitHash("origin/" + targetBranch)
 	commitRange := fmt.Sprintf("%s...%s", remote, local)
-
-	rawCommitCount, errLog := exec.Command(
-		"git", "log", "--pretty=oneline", commitRange,
-	).CombinedOutput()
+	rawCommitCount, errLog := exec.Command("git", "log", "--pretty=oneline", commitRange).CombinedOutput()
 
 	if errLog != nil {
 		fmt.Printf("Error counting commits between %s and %s commits:\n%s\n", remote, local, rawCommitCount)
 
 		if strings.Contains(errLog.Error(), "exit status 128") {
-			fmt.Printf("error counting unpushed commits;"+
-				"check to confirm that %s exists on the remote\n",
-				targetBranch,
-			)
+			fmt.Printf("error counting unpushed commits; check to confirm that %s exists on the remote\n", targetBranch)
 		}
 
 		panic(errLog)
