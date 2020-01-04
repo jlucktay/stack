@@ -29,6 +29,7 @@ func SendBuildRequest(apiurl, token, reqBody string) (*url.URL, error) {
 	if errReq != nil {
 		return nil, errReq
 	}
+
 	req.SetBasicAuth("username", token) // Azure DevOps API doesn't care about the username, just the token
 	req.Header.Add("Content-Type", "application/json")
 
@@ -50,6 +51,7 @@ func SendBuildRequest(apiurl, token, reqBody string) (*url.URL, error) {
 	}
 
 	var buildResult build
+
 	errUm := json.Unmarshal(respBytes, &buildResult)
 	if errUm != nil {
 		return nil, errUm
