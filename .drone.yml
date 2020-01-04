@@ -11,7 +11,7 @@ steps:
       - git fetch --tags
 
   # Test your go app
-  - name: test
+  - name: test-unit
     image: golang
     volumes:
       - name: deps
@@ -20,7 +20,7 @@ steps:
           - go test -race -v ./... -cover
 
   # Smoke test
-  - name: build
+  - name: test-smoke
     image: golang
     volumes:
       - name: deps
