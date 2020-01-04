@@ -40,6 +40,7 @@ func mustGetStackPath() string {
 	if !viper.IsSet(ghOrgKey) {
 		panic("the GitHub organisation has not been specified under '" + ghOrgKey + "' in your config")
 	}
+
 	ghRepoKey := "github.repo"
 	if !viper.IsSet(ghRepoKey) {
 		panic("the GitHub repository has not been specified under '" + ghRepoKey + "' in your config")

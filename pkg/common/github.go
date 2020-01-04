@@ -11,5 +11,6 @@ func mustGetCurrentGitHubLogin(c *github.Client) string {
 	if err != nil {
 		panic(err)
 	}
+
 	return u.GetLogin()
 }

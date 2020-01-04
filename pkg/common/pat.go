@@ -11,6 +11,7 @@ import (
 func ValidateAzureDevOpsPAT(token string) (string, error) {
 	viperKey := "azureDevOps.pat"
 	viperValue := viper.GetString(viperKey)
+
 	if len(viperValue) == 0 {
 		return "", fmt.Errorf(
 			"the value for the '%s' key in the '%s' file has a length of zero",
