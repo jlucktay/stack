@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+//nolint:funlen // TODO
 func InitStack() {
 	stackPath := mustGetStackPath()
 

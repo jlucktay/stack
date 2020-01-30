@@ -10,6 +10,7 @@ import (
 	"syscall"
 )
 
+//nolint:funlen // TODO
 func run(cmd *exec.Cmd) {
 	var wg sync.WaitGroup
 
