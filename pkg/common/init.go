@@ -18,7 +18,7 @@ func InitStack() {
 		panic("the stack path prefix has not been specified under '" + spKey + "' in your config")
 	}
 
-	parentStackDepth := 2
+	const parentStackDepth = 2
 
 	xStack := strings.Split(stackPath, string(os.PathSeparator))
 	if len(xStack) < parentStackDepth {
