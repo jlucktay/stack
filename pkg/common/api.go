@@ -39,7 +39,7 @@ func SendBuildRequest(apiurl, token, reqBody string) (*url.URL, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("URL '%s': status code error: %d %s\n"+
 			"Does your Azure DevOps token have the 'Build (Read & execute)' scope?",
 			apiurl, resp.StatusCode, resp.Status)

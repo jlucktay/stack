@@ -19,6 +19,7 @@ import (
 // 1. send issue to GitHub with appropriate directory tag
 // 2. print the URL of the newly-created issue
 
+//nolint:funlen // TODO
 func CreateIssue(title string) {
 	// 0
 	stackPath := mustGetStackPath()

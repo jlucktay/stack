@@ -18,6 +18,7 @@ func GetStackPath(prefix, remote string) (string, error) {
 	}
 
 	xwd := strings.Split(wd, prefix)
+	//nolint:gomnd // Checking the immediate parent of this working directory
 	if len(xwd) < 2 {
 		return "", fmt.Errorf("current working directory '%s' is not under '%s'", wd, prefix)
 	}

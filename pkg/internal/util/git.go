@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"strings"
 	"syscall"
+
+	"github.com/jlucktay/stack/internal/exit"
 )
 
 // CurrentBranch parses out the name of the current git branch, if we are inside a git repo.
@@ -22,7 +24,7 @@ func CurrentBranch() string {
 			// The program has exited with an exit code != 0
 			if status, ok := errExit.Sys().(syscall.WaitStatus); ok {
 				exitStatus := status.ExitStatus()
-				if exitStatus == 128 {
+				if exitStatus == exit.CmdGitError {
 					return ""
 				}
 
@@ -61,7 +63,7 @@ func MustHaveZeroUnpushedCommits(targetBranch string) {
 
 	if lineCount > 0 {
 		fmt.Printf("You have %d unpushed commit(s) on the '%s' branch!\n%v", lineCount, targetBranch, yeahNah)
-		os.Exit(1)
+		os.Exit(exit.UnpushedCommits)
 	}
 }
 

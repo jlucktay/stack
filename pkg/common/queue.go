@@ -22,6 +22,7 @@ const (
 	targetArgDelimiter   = ","
 )
 
+//nolint:funlen // TODO
 func StackQueue(branch, targets string, defID uint) {
 	buildQueueing := fmt.Sprintf("Queueing build def %d from branch '%s' ", defID, branch)
 
