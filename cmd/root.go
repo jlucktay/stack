@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"github.com/jlucktay/stack/internal/exit"
 	"github.com/jlucktay/stack/pkg/cmd/build"
 	"github.com/jlucktay/stack/pkg/cmd/cancel"
 	"github.com/jlucktay/stack/pkg/cmd/destroy"
@@ -57,7 +58,7 @@ pipelines, primarily to avoid the sluggish and generally awful UI of the latter.
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		os.Exit(exit.RootExecute)
 	}
 }
 
@@ -73,7 +74,7 @@ func initConfig() {
 	home, errHome := homedir.Dir()
 	if errHome != nil {
 		fmt.Println(errHome)
-		os.Exit(1)
+		os.Exit(exit.HomeNotFound)
 	}
 
 	// Name of config file, and extension.
@@ -108,7 +109,7 @@ func initConfig() {
 			}
 
 			fmt.Println("\nPlease see the README for details about the configuration file.")
-			os.Exit(1)
+			os.Exit(exit.ConfigNotFound)
 		} else {
 			panic(fmt.Sprintf("Fatal error reading config file '%s':\n%s\n", viper.ConfigFileUsed(), errViperRead))
 		}
