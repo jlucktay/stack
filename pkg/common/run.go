@@ -65,6 +65,7 @@ func run(cmd *exec.Cmd) {
 				panic(errWait)
 			}
 		}
+
 		wg.Wait()
 		close(chPrint)
 	}()
