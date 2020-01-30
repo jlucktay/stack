@@ -31,6 +31,7 @@ func run(cmd *exec.Cmd) {
 	chPrint := make(chan string)
 	scanOut := bufio.NewScanner(stdout)
 
+	//nolint:gomnd // This wait group covers the single goroutine started immediately below
 	wg.Add(1)
 
 	go func() {
@@ -42,6 +43,7 @@ func run(cmd *exec.Cmd) {
 
 	scanErr := bufio.NewScanner(stderr)
 
+	//nolint:gomnd // This wait group covers the single goroutine started immediately below
 	wg.Add(1)
 
 	go func() {

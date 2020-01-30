@@ -17,10 +17,12 @@ func InitStack() {
 		panic("the stack path prefix has not been specified under '" + spKey + "' in your config")
 	}
 
+	parentStackDepth := 2
+
 	xStack := strings.Split(stackPath, string(os.PathSeparator))
-	if len(xStack) < 2 {
-		panic(fmt.Sprintf("stack path '%s' should be least 2 levels deep, below '%s'",
-			stackPath, viper.GetString(spKey)))
+	if len(xStack) < parentStackDepth {
+		panic(fmt.Sprintf("stack path '%s' should be least %d levels deep, below '%s'",
+			stackPath, parentStackDepth, viper.GetString(spKey)))
 	}
 
 	const configSubs = "azure.subscriptions"
@@ -36,7 +38,7 @@ func InitStack() {
 		panic("the state key prefix has not been specified under '" + kpKey + "' in your config")
 	}
 
-	stackParent := xStack[len(xStack)-2]
+	stackParent := xStack[len(xStack)-parentStackDepth]
 	stack := xStack[len(xStack)-1]
 	stateKey := fmt.Sprintf("%s.%s.%s", viper.GetString(kpKey), stackParent, stack)
 
