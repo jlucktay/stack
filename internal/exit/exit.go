@@ -7,5 +7,6 @@ const (
 	HomeNotFound
 	ConfigNotFound
 	UnpushedCommits
-	CmdGitError
+
+	CmdGitError = 128
 )
