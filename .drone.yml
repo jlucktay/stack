@@ -42,7 +42,7 @@ steps:
       - name: deps
         path: /go
     commands:
-      - curl -sL https://git.io/goreleaser | bash
+      - curl --location --silent https://git.io/goreleaser | bash
     when:
       event: tag
 
