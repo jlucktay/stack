@@ -3,7 +3,7 @@ package common
 import (
 	"context"
 
-	"github.com/google/go-github/v27/github"
+	"github.com/google/go-github/v30/github"
 )
 
 func mustGetCurrentGitHubLogin(c *github.Client) string {

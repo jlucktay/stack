@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 
+	"github.com/Azure/azure-sdk-for-go/services/storage/mgmt/2019-04-01/storage"
 	"github.com/spf13/viper"
 )
 
@@ -21,7 +22,7 @@ func mustGetStorageAccountKey() string {
 
 	rgKey := "azure.state.resourceGroup"
 	if !viper.IsSet(rgKey) {
-		panic("the name of the resource group containing the remote state storage account" +
+		panic("the name of the resource group containing the remote state storage account " +
 			"has not been specified under '" + rgKey + "' in your config")
 	}
 
@@ -31,7 +32,7 @@ func mustGetStorageAccountKey() string {
 			saKey + "' in your config")
 	}
 
-	alkr, errLk := sc.ListKeys(context.TODO(), viper.GetString(rgKey), viper.GetString(saKey))
+	alkr, errLk := sc.ListKeys(context.TODO(), viper.GetString(rgKey), viper.GetString(saKey), storage.Kerb)
 	if errLk != nil {
 		panic(errLk)
 	}
