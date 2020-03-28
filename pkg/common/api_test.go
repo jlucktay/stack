@@ -19,10 +19,13 @@ func TestBuildRequest(t *testing.T) {
 		is.Equal("application/json", r.Header.Get("Content-Type")) // 'Content-Type' == 'application/json'.
 	}
 
-	payload, errPayload := common.GetPostPayload(123, map[string]string{"key": "value"}, "branch")
+	var testBuildID uint = 123
+
+	payload, errPayload := common.GetPostPayload(testBuildID, map[string]string{"key": "value"}, "branch")
 	if errPayload != nil {
 		t.Fatal(errPayload)
 	}
+
 	req, errCreate := common.CreateBuildRequest(
 		"dev.azure.com/build/me/a/build",
 		"this is my PAT; there are many like it, but this one is mine",
@@ -30,6 +33,7 @@ func TestBuildRequest(t *testing.T) {
 	if errCreate != nil {
 		t.Fatal(errCreate)
 	}
+
 	w := httptest.NewRecorder()
 	handler(w, req)
 }
