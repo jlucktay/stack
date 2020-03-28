@@ -1,0 +1,7 @@
+pre-push:
+  parallel: true
+  commands:
+    drone:
+      run: drone lint .drone.yml
+    golangci:
+      run: golangci-lint run --enable-all

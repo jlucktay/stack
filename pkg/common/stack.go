@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
 // GetStackPath will split the current working directory on 'prefix' and then check if it is part of a git repository
@@ -16,6 +18,7 @@ func GetStackPath(prefix, remote string) (string, error) {
 	}
 
 	xwd := strings.Split(wd, prefix)
+	//nolint:gomnd // Checking the immediate parent of this working directory
 	if len(xwd) < 2 {
 		return "", fmt.Errorf("current working directory '%s' is not under '%s'", wd, prefix)
 	}
@@ -26,6 +29,37 @@ func GetStackPath(prefix, remote string) (string, error) {
 	}
 
 	return xwd[1], nil
+}
+
+func mustGetStackPath() string {
+	spKey := "stackPrefix"
+	if !viper.IsSet(spKey) {
+		panic("the stack path prefix has not been specified under '" + spKey + "' in your config")
+	}
+
+	ghOrgKey := "github.org"
+	if !viper.IsSet(ghOrgKey) {
+		panic("the GitHub organisation has not been specified under '" + ghOrgKey + "' in your config")
+	}
+
+	ghRepoKey := "github.repo"
+	if !viper.IsSet(ghRepoKey) {
+		panic("the GitHub repository has not been specified under '" + ghRepoKey + "' in your config")
+	}
+
+	stackPath, errStackPath := GetStackPath(
+		viper.GetString(spKey),
+		fmt.Sprintf(
+			"github.com/%s/%s",
+			viper.GetString(ghOrgKey),
+			viper.GetString(ghRepoKey),
+		),
+	)
+	if errStackPath != nil {
+		panic(errStackPath)
+	}
+
+	return stackPath
 }
 
 // validateGitRemotes takes a string argument and searches for it in all remotes that the current git repository
@@ -39,7 +73,8 @@ func validateGitRemotes(needle string) error {
 	found := false
 
 	for _, remote := range strings.Split(string(remotes), "\n") {
-		if strings.Contains(remote, "(fetch)") && strings.Contains(remote, needle) {
+		if strings.Contains(remote, "(fetch)") &&
+			(strings.Contains(remote, needle) || strings.Contains(strings.ReplaceAll(remote, ":", "/"), needle)) {
 			found = true
 			break
 		}

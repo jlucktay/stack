@@ -28,6 +28,7 @@ func CreateBuildRequest(apiurl, token, reqBody string) (*http.Request, error) {
 	if errReq != nil {
 		return nil, errReq
 	}
+
 	req.SetBasicAuth("username", token) // Azure DevOps API doesn't care about the username, just the token
 	req.Header.Add("Content-Type", "application/json")
 
@@ -43,7 +44,7 @@ func SendBuildRequest(req *http.Request) (*url.URL, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("URL '%s': status code error: %d %s\n"+
 			"Does your Azure DevOps token have the 'Build (Read & execute)' scope?",
 			req.URL, resp.StatusCode, resp.Status)
@@ -55,6 +56,7 @@ func SendBuildRequest(req *http.Request) (*url.URL, error) {
 	}
 
 	var buildResult build
+
 	errUm := json.Unmarshal(respBytes, &buildResult)
 	if errUm != nil {
 		return nil, errUm

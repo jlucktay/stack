@@ -1,3 +1,4 @@
-// Package stack contains a main binary 'stack' (mostly config and flag parsing) and a 'common' package (the rest of
-// the logic) which constite a helper tool for working with Terraform stacks attached to Azure DevOps pipelines.
-package stack
+// Package main contains a main binary 'stack' (mostly config and flag parsing) and a 'common' package (the rest of
+// the logic) which constitute a support tool for working with Terraform stacks, Azure DevOps pipelines, and GitHub
+// projects/repos.
+package main

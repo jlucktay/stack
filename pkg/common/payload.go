@@ -35,6 +35,7 @@ func GetPostPayload(buildDefID uint, parameters map[string]string, branch string
 			} else {
 				payload.Parameters += ", "
 			}
+
 			payload.Parameters += fmt.Sprintf(`"Parameters.%s":"%s"`, key, value)
 		}
 

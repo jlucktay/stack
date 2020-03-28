@@ -1,0 +1,119 @@
+// Package cmd contains the root of the CLI command section of our migration support tool, 'stack', which leverages
+// logic from other packages stored elsewhere in the repo.
+package cmd
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	homedir "github.com/mitchellh/go-homedir"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	"github.com/jlucktay/stack/internal/exit"
+	"github.com/jlucktay/stack/pkg/cmd/build"
+	"github.com/jlucktay/stack/pkg/cmd/cancel"
+	"github.com/jlucktay/stack/pkg/cmd/destroy"
+	stackinit "github.com/jlucktay/stack/pkg/cmd/init"
+	"github.com/jlucktay/stack/pkg/cmd/issue"
+	"github.com/jlucktay/stack/pkg/cmd/version"
+)
+
+// Execute adds all child commands to the root command and sets flags appropriately.
+// This is called by main.main(). It only needs to happen once to the rootCmd.
+func Execute() {
+	// rootCmd represents the base command when called without any subcommands
+	var rootCmd = &cobra.Command{
+		Use:   "stack",
+		Short: "A support tool for working with Terraform stacks, Azure DevOps pipelines, and GitHub projects/repos.",
+		Long: `A support tool for working with Terraform stacks, Azure DevOps pipelines, and GitHub projects/repos.
+
+Stack was built to enable quicker turnaround time while working with Terraform stacks that were built via Azure DevOps
+pipelines, primarily to avoid the sluggish and generally awful UI of the latter.`,
+		// Uncomment the following line if your bare application
+		// has an action associated with it:
+		//	Run: func(cmd *cobra.Command, args []string) { },
+	}
+
+	cobra.OnInitialize(initConfig)
+
+	// Here you will define your flags and configuration settings.
+	// Cobra supports persistent flags, which, if defined here,
+	// will be global for your application.
+	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
+
+	// Cobra also supports local flags, which will only run
+	// when this action is called directly.
+	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	rootCmd.AddCommand(
+		build.NewCommand(),
+		cancel.NewCommand(),
+		destroy.NewCommand(),
+		stackinit.NewCommand(),
+		issue.NewCommand(),
+		version.NewCommand(),
+	)
+
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(exit.RootExecute)
+	}
+}
+
+const (
+	viperConfigName = "stack.config"
+	viperConfigType = "json"
+	viperConfigFile = viperConfigName + "." + viperConfigType
+)
+
+// initConfig reads in a config file from a preference order of search paths, and also environment variables if set.
+func initConfig() {
+	// Find home directory.
+	home, errHome := homedir.Dir()
+	if errHome != nil {
+		fmt.Println(errHome)
+		os.Exit(exit.HomeNotFound)
+	}
+
+	// Name of config file, and extension.
+	viper.SetConfigName(viperConfigName)
+	viper.SetConfigType(viperConfigType)
+
+	// Paths to search (in descending order of preference) for the config file.
+	configPaths := []string{
+		".",
+		filepath.Join(home, ".config/stack"),
+		"/etc/stack",
+	}
+
+	for _, configPath := range configPaths {
+		viper.AddConfigPath(configPath)
+	}
+
+	// Read in environment variables that match.
+	viper.AutomaticEnv()
+
+	if errViperRead := viper.ReadInConfig(); errViperRead != nil {
+		if _, ok := errViperRead.(viper.ConfigFileNotFoundError); ok {
+			fmt.Printf("Could not find a config file named '%s' at any of these paths:\n", viperConfigFile)
+
+			for _, configPath := range configPaths {
+				abs, errAbs := filepath.Abs(configPath)
+				if errAbs != nil {
+					panic(errAbs)
+				}
+
+				fmt.Printf("- %s/%s\n", abs, viperConfigFile)
+			}
+
+			fmt.Println("\nPlease see the README for details about the configuration file.")
+			os.Exit(exit.ConfigNotFound)
+		} else {
+			panic(fmt.Sprintf("Fatal error reading config file '%s':\n%s\n", viper.ConfigFileUsed(), errViperRead))
+		}
+	}
+
+	fmt.Println("Using config file:", viper.ConfigFileUsed())
+}

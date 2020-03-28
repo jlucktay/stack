@@ -1,0 +1,23 @@
+package init
+
+import (
+	"github.com/spf13/cobra"
+
+	"github.com/jlucktay/stack/pkg/common"
+)
+
+// NewCommand returns the init command.
+func NewCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:   "init",
+		Short: "Initialise this Terraform stack against remote state",
+		Long: `Runs Terraform with values derived from configured settings to initialise the
+current stack directory, using the Azure storage account for the remote state
+backend.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			common.InitStack()
+		},
+	}
+
+	return c
+}

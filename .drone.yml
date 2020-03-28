@@ -1,5 +1,8 @@
+---
 kind: pipeline
+type: docker
 name: default
+
 steps:
   # Drone does not pull git tags by default
   - name: fetch
@@ -7,16 +10,29 @@ steps:
     commands:
       - git fetch --tags
 
-# Test your go app
-  - name: test
+  # Test your go app
+  - name: test-unit
     image: golang
     volumes:
       - name: deps
         path: /go
         commands:
-          - go test -race -v ./... -cover
+          - go test -cover -race -v ./...
 
-# Run GoReleaser only on tags
+  # Smoke test
+  - name: test-smoke
+    image: golang
+    volumes:
+      - name: deps
+        path: /go
+    commands:
+      - go build
+      - mkdir /smoke
+      - mv stack /smoke
+      - cd /smoke
+      - ./stack
+
+  # Run GoReleaser only on tags
   - name: release
     image: golang
     environment:
@@ -26,7 +42,7 @@ steps:
       - name: deps
         path: /go
     commands:
-      - curl -sL https://git.io/goreleaser | bash
+      - curl --location --silent https://git.io/goreleaser | bash
     when:
       event: tag
 
