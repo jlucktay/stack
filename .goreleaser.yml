@@ -12,10 +12,11 @@ builds:
     ldflags:
       - >
         -s -w
-        -X go.jlucktay.dev/stack/pkg/version.version={{.Version}}
-        -X go.jlucktay.dev/stack/pkg/version.commit={{.ShortCommit}}
-        -X go.jlucktay.dev/stack/pkg/version.date={{.Date}}
-        -X go.jlucktay.dev/stack/pkg/version.builtBy=GoReleaser
+        -X 'go.jlucktay.dev/stack/pkg/version.version={{ .Version }}'
+        -X 'go.jlucktay.dev/stack/pkg/version.commit={{ .ShortCommit }}'
+        -X 'go.jlucktay.dev/stack/pkg/version.goVersion={{ .Env.GOVERSION }}'
+        -X 'go.jlucktay.dev/stack/pkg/version.date={{ .Date }}'
+        -X 'go.jlucktay.dev/stack/pkg/version.builtBy=GoReleaser'
 
 archives:
   - replacements:
@@ -33,7 +34,7 @@ snapshot:
 
 brews:
   - # Repository to push the tap to.
-    github:
+    tap:
       owner: jlucktay
       name: homebrew-tap
 
