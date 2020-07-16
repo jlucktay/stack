@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/jlucktay/stack/pkg/version"
+	"go.jlucktay.dev/stack/pkg/version"
 )
 
 // NewCommand returns the version command.
@@ -18,7 +18,7 @@ func NewCommand() *cobra.Command {
 The version value shown follows semantic versioning: https://semver.org
 Commit is the SHA1 hash of the git commit built from.
 Date is the timestamp of the build.`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			fmt.Println(version.Details())
 		},
 	}

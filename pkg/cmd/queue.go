@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/jlucktay/stack/pkg/common"
-	"github.com/jlucktay/stack/pkg/internal/util"
+	"go.jlucktay.dev/stack/pkg/common"
+	"go.jlucktay.dev/stack/pkg/internal/util"
 )
 
 func NewQueueCommand(defType string) *cobra.Command {

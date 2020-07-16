@@ -1,6 +1,6 @@
 package main
 
-import "github.com/jlucktay/stack/cmd"
+import "go.jlucktay.dev/stack/cmd"
 
 func main() {
 	cmd.Execute()

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/jlucktay/stack/internal/exit"
+	"go.jlucktay.dev/stack/internal/exit"
 )
 
 // CurrentBranch parses out the name of the current git branch, if we are inside a git repo.

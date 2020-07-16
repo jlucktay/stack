@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/jlucktay/stack/pkg/internal/util"
+	"go.jlucktay.dev/stack/pkg/internal/util"
 
 	"github.com/spf13/viper"
 )
