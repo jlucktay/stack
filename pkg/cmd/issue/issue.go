@@ -3,7 +3,7 @@ package issue
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/jlucktay/stack/pkg/common"
+	"go.jlucktay.dev/stack/pkg/common"
 )
 
 // NewCommand returns the issue command.

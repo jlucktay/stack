@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
 
-	"github.com/jlucktay/stack/pkg/cli"
+	"go.jlucktay.dev/stack/pkg/cli"
 )
 
 // issue flow:

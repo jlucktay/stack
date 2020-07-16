@@ -49,7 +49,7 @@ You should have a [working Go environment](https://golang.org/doc/install) and h
 To download the source, compile, and install the demo binary, run:
 
 ``` shell
-go get github.com/jlucktay/stack
+go get go.jlucktay.dev/stack
 ```
 
 The source code will be located in `$GOPATH/src/github.com/jlucktay/stack/`.
