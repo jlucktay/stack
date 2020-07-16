@@ -14,6 +14,7 @@ import (
 	"go.jlucktay.dev/stack/internal/exit"
 	"go.jlucktay.dev/stack/pkg/cmd/build"
 	"go.jlucktay.dev/stack/pkg/cmd/cancel"
+	"go.jlucktay.dev/stack/pkg/cmd/completion"
 	"go.jlucktay.dev/stack/pkg/cmd/destroy"
 	stackinit "go.jlucktay.dev/stack/pkg/cmd/init"
 	"go.jlucktay.dev/stack/pkg/cmd/issue"
@@ -50,6 +51,7 @@ pipelines, primarily to avoid the sluggish and generally awful UI of the latter.
 	rootCmd.AddCommand(
 		build.NewCommand(),
 		cancel.NewCommand(),
+		completion.NewCommand(),
 		destroy.NewCommand(),
 		stackinit.NewCommand(),
 		issue.NewCommand(),

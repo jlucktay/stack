@@ -42,13 +42,18 @@ brews:
     folder: HomebrewFormula
 
     # Caveats for the user of your binary.
-    caveats: "Please see the README for usage instructions: https://github.com/jlucktay/stack/blob/master/README.md"
+    caveats: |
+      Please see the README for usage instructions:
+      https://github.com/jlucktay/stack/blob/master/README.md
+
+      Bash completions installed to /usr/local/etc/bash_completion.d/
 
     # Your app's homepage.
     homepage: "https://github.com/jlucktay/stack"
 
     # Your app's description.
-    description: "A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos."
+    description: |
+      A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos.
 
     # Setting this will prevent goreleaser to actually try to commit the updated formula - instead, the formula file
     # will be stored on the dist folder only, leaving the responsibility of publishing it to the user.
@@ -73,11 +78,12 @@ brews:
     #   system "#{bin}/program --version"
     #   ...
 
-    # # Custom install script for brew.
-    # # Default is 'bin.install "program"'.
-    # install: |
-    #   bin.install "program"
-    #   ...
+    # Custom install script for brew.
+    install: |
+      bin.install "stack"
+      output = Utils.popen_read("#{bin}/stack completion bash")
+      (bash_completion/"stack").write output
+      prefix.install_metafiles
 
 changelog:
   sort: asc
