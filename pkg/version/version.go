@@ -4,13 +4,9 @@ import (
 	"fmt"
 )
 
-//nolint:gochecknoglobals // Take ldflags from GoReleaser.
+// Take ldflags from GoReleaser.
 var (
-	Version   string
-	Commit    string
-	GoVersion string
-	Date      string
-	BuiltBy   string
+	Version, Commit, GoVersion, Date, BuiltBy string //nolint:gochecknoglobals
 )
 
 func Details() string {
