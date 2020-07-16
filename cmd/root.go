@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -77,6 +78,10 @@ func initConfig() {
 	if errHome != nil {
 		fmt.Println(errHome)
 		os.Exit(exit.HomeNotFound)
+	}
+
+	if strings.Contains(home, "/tmp/") {
+		return
 	}
 
 	// Name of config file, and extension.
