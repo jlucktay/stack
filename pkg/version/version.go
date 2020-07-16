@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// Take ldflags from GoReleaser
+// Take ldflags from GoReleaser.
 var (
 	//nolint
 	version, commit, date, builtBy string

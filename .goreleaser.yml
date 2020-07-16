@@ -33,7 +33,7 @@ snapshot:
 
 brews:
   - # Repository to push the tap to.
-    github:
+    tap:
       owner: jlucktay
       name: homebrew-tap
 
