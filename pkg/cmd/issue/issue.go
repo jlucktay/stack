@@ -23,7 +23,7 @@ The above command would create a new issue in the configured GitHub org/repo
 titled "My issue title" with body text entered and saved through the user's
 default editor, denoted by the EDITOR environment variable.`,
 
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(cmd *cobra.Command, _ []string) {
 			title, errTitle := cmd.Flags().GetString("title")
 			if errTitle != nil {
 				panic(errTitle)

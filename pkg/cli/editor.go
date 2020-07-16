@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// DefaultEditor is nano because I prefer it. :D
+// DefaultEditor is nano because I prefer it.
 const DefaultEditor = "nano"
 
 // PreferredEditorResolver is a function that returns an editor that the user prefers to use, such as the configured
