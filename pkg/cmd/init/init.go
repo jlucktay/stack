@@ -14,7 +14,7 @@ func NewCommand() *cobra.Command {
 		Long: `Runs Terraform with values derived from configured settings to initialise the
 current stack directory, using the Azure storage account for the remote state
 backend.`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			common.InitStack()
 		},
 	}
