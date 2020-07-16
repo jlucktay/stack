@@ -1,4 +1,4 @@
-module github.com/jlucktay/stack
+module go.jlucktay.dev/stack
 
 go 1.14
 

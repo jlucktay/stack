@@ -3,7 +3,7 @@ package build
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/jlucktay/stack/pkg/cmd"
+	"go.jlucktay.dev/stack/pkg/cmd"
 )
 
 // NewCommand returns the build command.

@@ -11,13 +11,13 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/jlucktay/stack/internal/exit"
-	"github.com/jlucktay/stack/pkg/cmd/build"
-	"github.com/jlucktay/stack/pkg/cmd/cancel"
-	"github.com/jlucktay/stack/pkg/cmd/destroy"
-	stackinit "github.com/jlucktay/stack/pkg/cmd/init"
-	"github.com/jlucktay/stack/pkg/cmd/issue"
-	"github.com/jlucktay/stack/pkg/cmd/version"
+	"go.jlucktay.dev/stack/internal/exit"
+	"go.jlucktay.dev/stack/pkg/cmd/build"
+	"go.jlucktay.dev/stack/pkg/cmd/cancel"
+	"go.jlucktay.dev/stack/pkg/cmd/destroy"
+	stackinit "go.jlucktay.dev/stack/pkg/cmd/init"
+	"go.jlucktay.dev/stack/pkg/cmd/issue"
+	"go.jlucktay.dev/stack/pkg/cmd/version"
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
