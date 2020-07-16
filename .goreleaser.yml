@@ -46,8 +46,6 @@ brews:
       Please see the README for usage instructions:
       https://github.com/jlucktay/stack/blob/master/README.md
 
-      Bash completions installed to /usr/local/etc/bash_completion.d/
-
     # Your app's homepage.
     homepage: "https://github.com/jlucktay/stack"
 
