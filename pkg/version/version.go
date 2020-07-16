@@ -6,9 +6,9 @@ import (
 
 // Take ldflags from GoReleaser.
 var (
-	Version, Commit, GoVersion, Date, BuiltBy string //nolint:gochecknoglobals
+	version, commit, goVersion, date, builtBy string //nolint:gochecknoglobals
 )
 
 func Details() string {
-	return fmt.Sprintf("stack %s built from commit %s with %s on %s by %s.", Version, Commit, GoVersion, Date, BuiltBy)
+	return fmt.Sprintf("stack %s built from commit %s with %s on %s by %s.", version, commit, goVersion, date, builtBy)
 }
