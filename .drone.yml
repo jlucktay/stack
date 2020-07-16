@@ -42,7 +42,8 @@ steps:
       - name: deps
         path: /go
     commands:
-      - curl --location --silent https://git.io/goreleaser | bash
+      - curl --fail --location --silent https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
+      - GOVERSION=$(go version) goreleaser
     when:
       event: [tag]
 
