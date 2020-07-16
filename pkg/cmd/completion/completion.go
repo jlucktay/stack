@@ -33,7 +33,7 @@ func NewCommand() *cobra.Command {
 		DisableFlagsInUseLine: true,
 		ValidArgs:             []string{"bash", "zsh", "powershell"},
 		Args:                  cobra.ExactValidArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			var errGen error
 
 			switch args[0] {
@@ -45,9 +45,7 @@ func NewCommand() *cobra.Command {
 				errGen = cmd.Root().GenPowerShellCompletion(os.Stdout)
 			}
 
-			if errGen != nil {
-				panic(errGen)
-			}
+			return errGen
 		},
 	}
 }
