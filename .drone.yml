@@ -44,7 +44,7 @@ steps:
     commands:
       - curl --fail --location --silent https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
       - go env
-      - export GOVERSION=$(go version)
+      - export GOVERSION="$(go version)"
       - echo "GOVERSION '$GOVERSION'"
       - ./bin/goreleaser
     when:
