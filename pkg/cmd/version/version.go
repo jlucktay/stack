@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/jlucktay/stack/pkg/version"
+	"go.jlucktay.dev/stack/pkg/version"
 )
 
 // NewCommand returns the version command.

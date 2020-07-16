@@ -2,7 +2,7 @@
 
 [![Build Status][drone-badge]][drone]
 [![Go Report Card][goreportcard-badge]][goreportcard]
-[![GoDoc][godoc-badge]][godoc]
+[![PkgGoDev][pkggodev-badge]][pkggodev]
 
 A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos.
 
@@ -49,10 +49,8 @@ You should have a [working Go environment](https://golang.org/doc/install) and h
 To download the source, compile, and install the demo binary, run:
 
 ``` shell
-go get github.com/jlucktay/stack
+go get go.jlucktay.dev/stack
 ```
-
-The source code will be located in `$GOPATH/src/github.com/jlucktay/stack/`.
 
 A newly-compiled `stack` binary will be placed in `$GOPATH/bin/`.
 
@@ -281,7 +279,7 @@ Please make sure to update tests as appropriate.
 <!-- Badges and associated links -->
 [drone-badge]: https://cloud.drone.io/api/badges/jlucktay/stack/status.svg
 [drone]: https://cloud.drone.io/jlucktay/stack
-[goreportcard-badge]: https://goreportcard.com/badge/github.com/jlucktay/stack
-[goreportcard]: https://goreportcard.com/report/github.com/jlucktay/stack
-[godoc-badge]: https://godoc.org/github.com/jlucktay/stack?status.svg
-[godoc]: https://godoc.org/github.com/jlucktay/stack
+[goreportcard-badge]: https://goreportcard.com/badge/go.jlucktay.dev/stack
+[goreportcard]: https://goreportcard.com/report/go.jlucktay.dev/stack
+[pkggodev-badge]: https://pkg.go.dev/badge/go.jlucktay.dev/stack
+[pkggodev]: https://pkg.go.dev/go.jlucktay.dev/stack
