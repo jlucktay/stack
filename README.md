@@ -52,8 +52,6 @@ To download the source, compile, and install the demo binary, run:
 go get go.jlucktay.dev/stack
 ```
 
-The source code will be located in `$GOPATH/src/github.com/jlucktay/stack/`.
-
 A newly-compiled `stack` binary will be placed in `$GOPATH/bin/`.
 
 ### Direct download of binary relases
