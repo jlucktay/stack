@@ -104,7 +104,7 @@ func initConfig() {
 
 	if errViperRead := viper.ReadInConfig(); errViperRead != nil {
 		if _, ok := errViperRead.(viper.ConfigFileNotFoundError); ok {
-			fmt.Printf("Could not find a config file named '%s' at any of these paths:\n", viperConfigFile)
+			fmt.Fprintf(os.Stderr, "Could not find a config file named '%s' at any of these paths:\n", viperConfigFile)
 
 			for _, configPath := range configPaths {
 				abs, errAbs := filepath.Abs(configPath)
@@ -112,10 +112,10 @@ func initConfig() {
 					panic(errAbs)
 				}
 
-				fmt.Printf("- %s/%s\n", abs, viperConfigFile)
+				fmt.Fprintf(os.Stderr, "- %s/%s\n", abs, viperConfigFile)
 			}
 
-			fmt.Println("\nPlease see the README for details about the configuration file.")
+			fmt.Fprintf(os.Stderr, "\nPlease see the README for details about the configuration file.")
 			os.Exit(exit.ConfigNotFound)
 		} else {
 			panic(fmt.Sprintf("Fatal error reading config file '%s':\n%s\n", viper.ConfigFileUsed(), errViperRead))
