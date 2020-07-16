@@ -6,8 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/jlucktay/stack/pkg/common"
 	"github.com/matryer/is"
+
+	"go.jlucktay.dev/stack/pkg/common"
 )
 
 func TestBuildRequest(t *testing.T) {
