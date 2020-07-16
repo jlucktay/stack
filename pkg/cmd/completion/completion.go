@@ -13,22 +13,22 @@ func NewCommand() *cobra.Command {
 		Short: "Generate completion script",
 		Long: `To load completions:
 
-Bash:
+  Bash:
 
-$ source <(stack completion bash)
+    $ source <(stack completion bash)
 
-# To load completions for each session, execute once:
-Linux:
-	$ stack completion bash > /etc/bash_completion.d/stack
-MacOS:
-	$ stack completion bash > /usr/local/etc/bash_completion.d/stack
+    # To load completions for each session, execute once:
+    Linux:
+      $ stack completion bash > /etc/bash_completion.d/stack
+    MacOS:
+      $ stack completion bash > /usr/local/etc/bash_completion.d/stack
 
-Zsh:
+  Zsh:
 
-$ source <(stack completion zsh)
+    $ source <(stack completion zsh)
 
-# To load completions for each session, execute once:
-	$ stack completion zsh > "${fpath[1]}/_stack"
+    # To load completions for each session, execute once:
+      $ stack completion zsh > "${fpath[1]}/_stack"
 `,
 		DisableFlagsInUseLine: true,
 		ValidArgs:             []string{"bash", "zsh", "powershell"},
