@@ -1,4 +1,6 @@
-# Inspiration: https://tech.davis-hansson.com/p/make/
+# Inspiration:
+# - https://devhints.io/makefile
+# - https://tech.davis-hansson.com/p/make/
 
 SHELL := bash
 .DELETE_ON_ERROR:
