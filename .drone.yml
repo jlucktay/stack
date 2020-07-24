@@ -16,8 +16,8 @@ steps:
     volumes:
       - name: deps
         path: /go
-        commands:
-          - go test -cover -race -v ./...
+    commands:
+      - go test -cover -race -v ./...
 
   # Smoke test
   - name: test-smoke
