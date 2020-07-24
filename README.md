@@ -3,6 +3,7 @@
 [![Build Status][drone-badge]][drone]
 [![Go Report Card][goreportcard-badge]][goreportcard]
 [![PkgGoDev][pkggodev-badge]][pkggodev]
+[![Contribute][contrib-badge]][contrib]
 
 A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos.
 
@@ -289,11 +290,15 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
+See also the [contributing guide](.github/CONTRIBUTING.md).
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
 <!-- Badges and associated links -->
+[contrib-badge]: https://img.shields.io/github/contributors/jlucktay/stack
+[contrib]: https://github.com/jlucktay/stack/tree/master/.github/CONTRIBUTING.md
 [drone-badge]: https://cloud.drone.io/api/badges/jlucktay/stack/status.svg
 [drone]: https://cloud.drone.io/jlucktay/stack
 [goreportcard-badge]: https://goreportcard.com/badge/go.jlucktay.dev/stack
