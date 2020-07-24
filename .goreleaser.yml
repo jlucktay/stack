@@ -1,13 +1,14 @@
 before:
   hooks:
+    - make clean
     - go mod download
 
+# Runs 'go build'
 builds:
   - main: ./
+
     flags:
       - -v
-    env:
-      - CGO_ENABLED=0
 
     ldflags:
       - >
@@ -16,6 +17,18 @@ builds:
         -X 'go.jlucktay.dev/stack/pkg/version.commit={{ .ShortCommit }}'
         -X 'go.jlucktay.dev/stack/pkg/version.date={{ .Date }}'
         -X 'go.jlucktay.dev/stack/pkg/version.builtBy=GoReleaser'
+
+    env:
+      - CGO_ENABLED=0
+
+    # List of combinations of GOOS + GOARCH + GOARM to ignore.
+    ignore:
+      - goos: darwin
+        goarch: 386
+
+    # Set the modified timestamp on the output binary, typically you would do this to ensure a build was reproducible.
+    # Pass empty string to skip modifying the output.
+    mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
   - replacements:
