@@ -39,7 +39,7 @@ tmp/.linted.sentinel: tmp/.tests-passed.sentinel
 > touch $@
 
 # Docker image - re-build if the lint output is re-run.
-out/image-id: tmp/.linted.sentinel
+out/image-id: Dockerfile tmp/.linted.sentinel
 > mkdir -p $(@D)
 > image_id="example.com/my-app:$$(uuidgen)"
 > docker build --tag="$${image_id}" .

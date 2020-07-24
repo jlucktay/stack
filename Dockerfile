@@ -1,5 +1,21 @@
-# TODO(jlucktay): this whole Dockerfile is just a no-op for now
+FROM golang:buster AS builder
+
+WORKDIR /build
+
+# Copy `go.mod` for definitions and `go.sum` to invalidate the next layer in case of a change in the dependencies
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+COPY . .
+
+RUN GOOS=linux go build -tags 'osusergo netgo'
 
 FROM scratch
 
-ENTRYPOINT [ "/" ]
+WORKDIR /
+
+COPY --from=builder /build/stack .
+
+ENTRYPOINT [ "/stack" ]
