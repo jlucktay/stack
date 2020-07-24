@@ -69,11 +69,9 @@ brews:
     #   - svn
     #   - bash
 
-    # # So you can `brew test` your formula.
-    # # Default is empty.
-    # test: |
-    #   system "#{bin}/program --version"
-    #   ...
+    # So you can `brew test` your formula.
+    test: |
+      system "#{bin}/stack"
 
     # Custom install script for brew.
     install: |

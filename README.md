@@ -266,6 +266,23 @@ New issue: https://github.com/MyGitHubOrg/MyGitHubRepo/issues/1234
 
 Displays version and build information for the current `stack` binary.
 
+## Docker
+
+There is a [Dockerfile](Dockerfile) that is looped into `make` and will be built by the default rule.
+
+A typical execution of the Docker image from within your own stack directory needs to mount a volume under `/workdir`
+and would look something like this:
+
+```shell
+docker run --rm --volume $(pwd):/workdir go.jlucktay.dev/stack[:<tag>]
+```
+
+The subcommands [described above](#usage) may be passed in by appending them to this command line, for example:
+
+```shell
+docker run --rm --volume $(pwd):/workdir go.jlucktay.dev/stack[:<tag>] version
+```
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
