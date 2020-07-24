@@ -16,8 +16,8 @@ steps:
     volumes:
       - name: deps
         path: /go
-        commands:
-          - go test -cover -race -v ./...
+    commands:
+      - go test -cover -race -v ./...
 
   # Smoke test
   - name: test-smoke
@@ -26,7 +26,7 @@ steps:
       - name: deps
         path: /go
     commands:
-      - go build
+      - CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w"
       - mkdir /smoke
       - mv stack /smoke
       - cd /smoke
