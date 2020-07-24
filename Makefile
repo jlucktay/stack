@@ -19,13 +19,19 @@ endif
 build: out/image-id
 .PHONY: build
 
-# Clean up the output directories; all the sentinel files go under tmp, so this will cause everything to get rebuilt.
+# Clean up the output directories; all the sentinel files go under `tmp`, so this will cause everything to get rebuilt.
 clean:
 > rm -rf tmp
 > rm -rf out
 .PHONY: clean
 
-# Tests - re-run if any Go files have changes since tmp/.tests-passed.sentinel last touched.
+# Clean up any built Docker images.
+clean-docker:
+> docker images --no-trunc --quiet go.jlucktay.dev/stack | sort -f | uniq | xargs -n 1 docker rmi --force
+> rm -f out/image-id
+.PHONY: clean-docker
+
+# Tests - re-run if any Go files have changes since `tmp/.tests-passed.sentinel` was last touched.
 tmp/.tests-passed.sentinel: $(shell find . -type f -iname "*.go")
 > mkdir -p $(@D)
 > go test ./...
@@ -41,6 +47,6 @@ tmp/.linted.sentinel: tmp/.tests-passed.sentinel
 # Docker image - re-build if the lint output is re-run.
 out/image-id: Dockerfile tmp/.linted.sentinel
 > mkdir -p $(@D)
-> image_id="example.com/my-app:$$(uuidgen)"
+> image_id="go.jlucktay.dev/stack:$$(uuidgen)"
 > docker build --tag="$${image_id}" .
 > echo "$${image_id}" > out/image-id
