@@ -5,7 +5,7 @@ import (
 	"runtime"
 )
 
-// Take ldflags from GoReleaser.
+// Used with ldflags at build time.
 var (
 	version, commit, date, builtBy string //nolint:gochecknoglobals
 )
