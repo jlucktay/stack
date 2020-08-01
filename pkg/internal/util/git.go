@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/go-git/go-git/v5"
@@ -13,9 +12,7 @@ import (
 	"go.jlucktay.dev/stack/internal/exit"
 )
 
-// CurrentBranch parses out the name of the current git branch, if we are inside a git repo.
-// Otherwise, an empty string is returned.
-func CurrentBranch() string {
+func mustGetRepo() *git.Repository {
 	dir, errGetWD := os.Getwd()
 	if errGetWD != nil {
 		panic(errGetWD)
@@ -24,13 +21,19 @@ func CurrentBranch() string {
 	repository, errOpen := git.PlainOpen(dir)
 	if errOpen != nil {
 		if errors.Is(errOpen, git.ErrRepositoryNotExists) {
-			return ""
+			return nil
 		}
 
 		panic(errOpen)
 	}
 
-	ref, errRef := repository.Reference(plumbing.HEAD, true)
+	return repository
+}
+
+// CurrentBranch parses out the name of the current git branch, if we are inside a git repo.
+// Otherwise, an empty string is returned.
+func CurrentBranch() string {
+	ref, errRef := mustGetRepo().Reference(plumbing.HEAD, true)
 	if errRef != nil {
 		panic(errRef)
 	}
@@ -45,35 +48,20 @@ func CurrentBranch() string {
 func MustHaveZeroUnpushedCommits(targetBranch string) {
 	local := mustGetCommitHash(targetBranch)
 	remote := mustGetCommitHash("origin/" + targetBranch)
-	commitRange := fmt.Sprintf("%s...%s", remote, local)
-	rawCommitCount, errLog := exec.Command("git", "log", "--pretty=oneline", commitRange).CombinedOutput()
 
-	if errLog != nil {
-		fmt.Printf("Error counting commits between %s and %s commits:\n%s\n", remote, local, rawCommitCount)
-
-		if strings.Contains(errLog.Error(), "exit status 128") {
-			fmt.Printf("error counting unpushed commits; check to confirm that %s exists on the remote\n", targetBranch)
-		}
-
-		panic(errLog)
-	}
-
-	lineCount := strings.Count(string(rawCommitCount), "\n")
-
-	if lineCount > 0 {
-		fmt.Printf("You have %d unpushed commit(s) on the '%s' branch!\n%v", lineCount, targetBranch, yeahNah)
+	if !strings.EqualFold(local, remote) {
+		fmt.Printf("Local vs remote branch '%s' has unpushed commits!\n%v", targetBranch, yeahNah)
 		os.Exit(exit.UnpushedCommits)
 	}
 }
 
 func mustGetCommitHash(branch string) string {
-	rawHash, errRevParse := exec.Command("git", "rev-parse", branch).CombinedOutput()
-	if errRevParse != nil {
-		fmt.Printf("Error parsing branch ref '%s':\n%s\n", branch, rawHash)
-		panic(errRevParse)
+	ref, errRef := mustGetRepo().Reference(plumbing.NewBranchReferenceName(branch), true)
+	if errRef != nil {
+		panic(errRef)
 	}
 
-	return strings.TrimSpace(string(rawHash))
+	return ref.Hash().String()
 }
 
 // By special request from one Mr Richard Weston.
