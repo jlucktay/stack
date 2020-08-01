@@ -41,6 +41,7 @@ tmp/.tests-passed.sentinel: $(shell find . -type f -iname "*.go")
 tmp/.linted.sentinel: tmp/.tests-passed.sentinel
 > mkdir -p $(@D)
 > golangci-lint run
+> find . -type f -iname "*.go" -not -path "*/vendor/*" -exec gofmt -s -w "{}" +
 > go vet ./...
 > touch $@
 
