@@ -4,6 +4,7 @@
 [![Go Report Card][goreportcard-badge]][goreportcard]
 [![PkgGoDev][pkggodev-badge]][pkggodev]
 [![Contribute][contrib-badge]][contrib]
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](http://makeapullrequest.com)
 
 A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos.
 
@@ -28,14 +29,13 @@ There are numerous installation options for `stack`:
 
 #### First time install
 
-``` shell
-brew tap jlucktay/tap
+```shell
 brew install jlucktay/tap/stack
 ```
 
 #### Ongoing upgrades
 
-``` shell
+```shell
 brew upgrade jlucktay/tap/stack
 ```
 
@@ -49,7 +49,7 @@ You should have a [working Go environment](https://golang.org/doc/install) and h
 
 To download the source, compile, and install the demo binary, run:
 
-``` shell
+```shell
 go get go.jlucktay.dev/stack
 ```
 
@@ -80,13 +80,13 @@ Under the `.azure.subscriptions` section, all keys defined here will map verbati
 
 Assume - for this example's sake - that the working directory is as follows:
 
-``` bash
+```bash
 /git/MyGitHubOrg/MyGitHubRepo/stack-prefix/subscription-alias/one/two/three/my-stack
 ```
 
 Also assume that the following values are configured:
 
-``` json
+```json
 {
   "azure": {
     "state": {
@@ -116,7 +116,7 @@ For remote state storage within the storage account, the key value is made up of
 
 The container within the remote state storage account maps to the GUID of the subscription.
 
-``` bash
+```bash
 $ pwd
 /git/MyGitHubOrg/MyGitHubRepo/stack-prefix/subscription-alias/one/two/three/my-stack
 $ stack init
@@ -153,7 +153,7 @@ authed, and available on your `$PATH`:
 
 Initialises the current Terraform stack directory using the Azure storage account for the remote state backend.
 
-``` bash
+```bash
 $ stack init
 Switching subscriptions... done.
 Retrieving storage account key... done.
@@ -164,7 +164,7 @@ Initialising Terraform with following dynamic values:
 
 #### `stack init` relevant config keys
 
-``` json
+```json
 {
   "azure": {
     "state": {
@@ -187,14 +187,14 @@ Initialising Terraform with following dynamic values:
 
 Queues a plan in Azure DevOps to build the Terraform stack in the current directory.
 
-``` bash
+```bash
 $ stack build
 Stack (plan) URL: https://dev.azure.com/MyAzureDevOpsOrg/12345678-90ab-cdef-1234-567890abcdef/_build/results?buildId=1234
 ```
 
 #### `stack build` relevant config keys
 
-``` json
+```json
 {
   "azureDevOps": {
     "buildDefID": 5,
@@ -217,7 +217,7 @@ If given, build from this branch. Defaults to the current branch.
 If given, target these specific Terraform resources only. Delimit multiple target IDs with a comma `,`.
 For example:
 
-``` bash
+```bash
 stack build --target="azurerm_resource_group.main,azurerm_virtual_machine.app,azurerm_virtual_machine.database"
 ```
 
@@ -243,7 +243,7 @@ current user.
 The issue's body text is gathered by way of an interactive editor, designated by the current environment's `EDITOR`
 variable.
 
-``` bash
+```bash
 $ stack issue -t "There's a problem with this stack!"
 ...
 ($EDITOR is launched to gather issue body)
@@ -253,7 +253,7 @@ New issue: https://github.com/MyGitHubOrg/MyGitHubRepo/issues/1234
 
 #### `stack issue` relevant config keys
 
-``` json
+```json
 {
   "github": {
     "org": "the name of the organisation within GitHub",
@@ -297,6 +297,7 @@ See also the [contributing guide](.github/CONTRIBUTING.md).
 [MIT](https://choosealicense.com/licenses/mit/)
 
 <!-- Badges and associated links -->
+
 [contrib-badge]: https://img.shields.io/github/contributors/jlucktay/stack
 [contrib]: https://github.com/jlucktay/stack/tree/master/.github/CONTRIBUTING.md
 [drone-badge]: https://cloud.drone.io/api/badges/jlucktay/stack/status.svg
