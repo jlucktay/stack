@@ -33,7 +33,13 @@ func mustGetRepo() *git.Repository {
 // CurrentBranch parses out the name of the current git branch, if we are inside a git repo.
 // Otherwise, an empty string is returned.
 func CurrentBranch() string {
-	ref, errRef := mustGetRepo().Reference(plumbing.HEAD, true)
+	repo := mustGetRepo()
+
+	if repo == nil {
+		return ""
+	}
+
+	ref, errRef := repo.Reference(plumbing.HEAD, true)
 	if errRef != nil {
 		panic(errRef)
 	}

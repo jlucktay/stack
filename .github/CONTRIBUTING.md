@@ -6,7 +6,7 @@ The following is a set of guidelines for contributing to `stack` on GitHub.
 Keep in mind that these are mostly guidelines, not rules.
 Use your best judgment, and feel free to propose changes to this document in a pull request.
 
-**Working on your first Pull Request?** You can learn how from this *free* series
+**Working on your first Pull Request?** You can learn how from this _free_ series
 [How to Contribute to an Open Source Project on GitHub][howto-contribute].
 
 Thanks again! :heart: :heart: :heart:
