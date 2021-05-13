@@ -56,7 +56,7 @@ brews:
     # Caveats for the user of your binary.
     caveats: |
       Please see the README for usage instructions:
-      https://github.com/jlucktay/stack/blob/master/README.md
+      https://github.com/jlucktay/stack/blob/main/README.md
 
     # Your app's homepage.
     homepage: "https://github.com/jlucktay/stack"

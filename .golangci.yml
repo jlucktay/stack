@@ -1,6 +1,6 @@
 issues:
-  # Show only new issues created since branching away from 'master'
-  new-from-rev: master
+  # Show only new issues created since branching away from 'main'
+  new-from-rev: origin/main
 
 run:
   timeout: 1m

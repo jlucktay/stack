@@ -299,7 +299,7 @@ See also the [contributing guide](.github/CONTRIBUTING.md).
 <!-- Badges and associated links -->
 
 [contrib-badge]: https://img.shields.io/github/contributors/jlucktay/stack
-[contrib]: https://github.com/jlucktay/stack/tree/master/.github/CONTRIBUTING.md
+[contrib]: https://github.com/jlucktay/stack/tree/main/.github/CONTRIBUTING.md
 [drone-badge]: https://cloud.drone.io/api/badges/jlucktay/stack/status.svg
 [drone]: https://cloud.drone.io/jlucktay/stack
 [goreportcard-badge]: https://goreportcard.com/badge/go.jlucktay.dev/stack
