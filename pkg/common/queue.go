@@ -80,7 +80,12 @@ func StackQueue(branch, targets string, defID uint) {
 		viper.GetString(adoProjectKey),
 	)
 
-	apiResult, errAPI := SendBuildRequest(apiURL, viper.GetString(adoPATKey), payload)
+	req, errReq := CreateBuildRequest(apiURL, viper.GetString(adoPATKey), payload)
+	if errReq != nil {
+		panic(errReq)
+	}
+
+	apiResult, errAPI := SendBuildRequest(req)
 	if errAPI != nil {
 		panic(errAPI)
 	}

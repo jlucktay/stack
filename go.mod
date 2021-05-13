@@ -10,6 +10,7 @@ require (
 	github.com/Azure/go-autorest/autorest/validation v0.3.0 // indirect
 	github.com/go-git/go-git/v5 v5.2.0
 	github.com/google/go-github/v30 v30.1.0
+	github.com/matryer/is v1.3.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.1.3
