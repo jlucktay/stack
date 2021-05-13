@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -14,6 +15,7 @@ import (
 	"go.jlucktay.dev/stack/internal/exit"
 	"go.jlucktay.dev/stack/pkg/cmd/build"
 	"go.jlucktay.dev/stack/pkg/cmd/cancel"
+	"go.jlucktay.dev/stack/pkg/cmd/completion"
 	"go.jlucktay.dev/stack/pkg/cmd/destroy"
 	stackinit "go.jlucktay.dev/stack/pkg/cmd/init"
 	"go.jlucktay.dev/stack/pkg/cmd/issue"
@@ -50,6 +52,7 @@ pipelines, primarily to avoid the sluggish and generally awful UI of the latter.
 	rootCmd.AddCommand(
 		build.NewCommand(),
 		cancel.NewCommand(),
+		completion.NewCommand(),
 		destroy.NewCommand(),
 		stackinit.NewCommand(),
 		issue.NewCommand(),
@@ -77,6 +80,10 @@ func initConfig() {
 		os.Exit(exit.HomeNotFound)
 	}
 
+	if strings.Contains(home, "/tmp/") {
+		return
+	}
+
 	// Name of config file, and extension.
 	viper.SetConfigName(viperConfigName)
 	viper.SetConfigType(viperConfigType)
@@ -97,22 +104,10 @@ func initConfig() {
 
 	if errViperRead := viper.ReadInConfig(); errViperRead != nil {
 		if _, ok := errViperRead.(viper.ConfigFileNotFoundError); ok {
-			fmt.Printf("Could not find a config file named '%s' at any of these paths:\n", viperConfigFile)
-
-			for _, configPath := range configPaths {
-				abs, errAbs := filepath.Abs(configPath)
-				if errAbs != nil {
-					panic(errAbs)
-				}
-
-				fmt.Printf("- %s/%s\n", abs, viperConfigFile)
-			}
-
-			fmt.Println("\nPlease see the README for details about the configuration file.")
-			os.Exit(exit.ConfigNotFound)
-		} else {
-			panic(fmt.Sprintf("Fatal error reading config file '%s':\n%s\n", viper.ConfigFileUsed(), errViperRead))
+			return
 		}
+
+		panic(fmt.Sprintf("Fatal error reading config file '%s':\n%s\n", viper.ConfigFileUsed(), errViperRead))
 	}
 
 	fmt.Println("Using config file:", viper.ConfigFileUsed())

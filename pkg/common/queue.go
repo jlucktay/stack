@@ -5,9 +5,9 @@ import (
 	"log"
 	"strings"
 
-	"go.jlucktay.dev/stack/pkg/internal/util"
-
 	"github.com/spf13/viper"
+
+	"go.jlucktay.dev/stack/pkg/internal/util"
 )
 
 // queue flow:

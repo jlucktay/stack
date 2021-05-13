@@ -2,13 +2,38 @@ package version
 
 import (
 	"fmt"
+	"runtime"
 )
 
-// Take ldflags from GoReleaser.
+// Used with ldflags at build time.
 var (
-	version, commit, goVersion, date, builtBy string //nolint:gochecknoglobals
+	version, commit, date, builtBy string //nolint:gochecknoglobals
 )
 
 func Details() string {
-	return fmt.Sprintf("stack %s built from commit %s with %s on %s by %s.", version, commit, goVersion, date, builtBy)
+	output := "stack"
+
+	if len(version) > 0 {
+		output += fmt.Sprintf(" %s", version)
+	}
+
+	output += " built"
+
+	if len(commit) > 0 {
+		output += fmt.Sprintf(" from commit %s", commit)
+	}
+
+	output += fmt.Sprintf(" with %s", runtime.Version())
+
+	if len(date) > 0 {
+		output += fmt.Sprintf(" on %s", date)
+	}
+
+	if len(builtBy) > 0 {
+		output += fmt.Sprintf(" by %s", builtBy)
+	}
+
+	output += "."
+
+	return output
 }

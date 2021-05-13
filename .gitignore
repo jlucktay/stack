@@ -14,3 +14,7 @@
 # Builds
 /bin/
 /dist/
+
+# Makefile things
+/out/
+/tmp/

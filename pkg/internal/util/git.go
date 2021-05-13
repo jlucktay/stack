@@ -1,80 +1,73 @@
 package util
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"os"
-	"os/exec"
 	"strings"
-	"syscall"
+
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 
 	"go.jlucktay.dev/stack/internal/exit"
 )
 
+func mustGetRepo() *git.Repository {
+	dir, errGetWD := os.Getwd()
+	if errGetWD != nil {
+		panic(errGetWD)
+	}
+
+	repository, errOpen := git.PlainOpen(dir)
+	if errOpen != nil {
+		if errors.Is(errOpen, git.ErrRepositoryNotExists) {
+			return nil
+		}
+
+		panic(errOpen)
+	}
+
+	return repository
+}
+
 // CurrentBranch parses out the name of the current git branch, if we are inside a git repo.
 // Otherwise, an empty string is returned.
 func CurrentBranch() string {
-	cmdGit := exec.Command("git", "rev-parse", "--is-inside-work-tree")
-	_, errRepoTest := cmdGit.Output()
+	repo := mustGetRepo()
 
-	// With thanks to:
-	// https://stackoverflow.com/questions/10385551/get-exit-code-go
-	if errRepoTest != nil {
-		if errExit, ok := errRepoTest.(*exec.ExitError); ok {
-			// The program has exited with an exit code != 0
-			if status, ok := errExit.Sys().(syscall.WaitStatus); ok {
-				exitStatus := status.ExitStatus()
-				if exitStatus == exit.CmdGitError {
-					return ""
-				}
-
-				log.Fatalf("'%+v' exit code: %d", cmdGit, exitStatus)
-			}
-		}
-
-		log.Fatalf("'%+v': %+v", cmdGit, errRepoTest)
+	if repo == nil {
+		return ""
 	}
 
-	gitRaw, errBranch := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
-	if errBranch != nil {
-		panic(errBranch)
+	ref, errRef := repo.Reference(plumbing.HEAD, true)
+	if errRef != nil {
+		panic(errRef)
 	}
 
-	return strings.TrimSpace(string(gitRaw))
+	if ref.Name().IsBranch() {
+		return ref.Name().Short()
+	}
+
+	return ref.String()
 }
 
 func MustHaveZeroUnpushedCommits(targetBranch string) {
 	local := mustGetCommitHash(targetBranch)
 	remote := mustGetCommitHash("origin/" + targetBranch)
-	commitRange := fmt.Sprintf("%s...%s", remote, local)
-	rawCommitCount, errLog := exec.Command("git", "log", "--pretty=oneline", commitRange).CombinedOutput()
 
-	if errLog != nil {
-		fmt.Printf("Error counting commits between %s and %s commits:\n%s\n", remote, local, rawCommitCount)
-
-		if strings.Contains(errLog.Error(), "exit status 128") {
-			fmt.Printf("error counting unpushed commits; check to confirm that %s exists on the remote\n", targetBranch)
-		}
-
-		panic(errLog)
-	}
-
-	lineCount := strings.Count(string(rawCommitCount), "\n")
-
-	if lineCount > 0 {
-		fmt.Printf("You have %d unpushed commit(s) on the '%s' branch!\n%v", lineCount, targetBranch, yeahNah)
+	if !strings.EqualFold(local, remote) {
+		fmt.Printf("Local vs remote branch '%s' has unpushed commits!\n%v", targetBranch, yeahNah)
 		os.Exit(exit.UnpushedCommits)
 	}
 }
 
 func mustGetCommitHash(branch string) string {
-	rawHash, errRevParse := exec.Command("git", "rev-parse", branch).CombinedOutput()
-	if errRevParse != nil {
-		fmt.Printf("Error parsing branch ref '%s':\n%s\n", branch, rawHash)
-		panic(errRevParse)
+	ref, errRef := mustGetRepo().Reference(plumbing.NewBranchReferenceName(branch), true)
+	if errRef != nil {
+		panic(errRef)
 	}
 
-	return strings.TrimSpace(string(rawHash))
+	return ref.Hash().String()
 }
 
 // By special request from one Mr Richard Weston.

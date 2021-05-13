@@ -1,0 +1,20 @@
+# Project metadata
+.git/
+.github/
+
+# Builds
+/bin/
+/dist/
+
+# Documentation and text
+/docs/
+/examples/
+*.md
+*.log
+*.txt
+
+# Makefile things
+/out/
+/tmp/
+
+Dockerfile
