@@ -22,7 +22,7 @@ linters-settings:
     errorf: true
 
   gci:
-    local-prefixes: go.jlucktay.dev/template-go
+    local-prefixes: go.jlucktay.dev/stack
 
   goconst:
     min-len: 3

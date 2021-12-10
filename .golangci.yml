@@ -1,6 +1,0 @@
-issues:
-  # Show only new issues created since branching away from 'main'
-  new-from-rev: origin/main
-
-run:
-  timeout: 1m
