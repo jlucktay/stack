@@ -39,7 +39,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Update 'make' and run 'make all' on Linux
         if: ${{ matrix.platform == 'ubuntu-latest' }}
