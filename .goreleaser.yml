@@ -1,22 +1,22 @@
 before:
   hooks:
-    - make clean
-    - go mod download
+    - go mod tidy
 
 # Runs 'go build'
 builds:
-  - main: ./
-
-    flags:
+  - flags:
+      # If you do not run your builds from a consistent directory structure, pass -trimpath to flags.
+      - -trimpath
       - -v
 
     ldflags:
+      # https://www.digitalocean.com/community/tutorials/using-ldflags-to-set-version-information-for-go-applications
       - >
-        -s -w
-        -X 'go.jlucktay.dev/stack/pkg/version.version={{ .Version }}'
-        -X 'go.jlucktay.dev/stack/pkg/version.commit={{ .ShortCommit }}'
-        -X 'go.jlucktay.dev/stack/pkg/version.date={{ .Date }}'
+        -X 'go.jlucktay.dev/stack/pkg/version.buildDate={{ .Date }}'
         -X 'go.jlucktay.dev/stack/pkg/version.builtBy=GoReleaser'
+        -X 'go.jlucktay.dev/stack/pkg/version.commit={{ .ShortCommit }}'
+        -X 'go.jlucktay.dev/stack/pkg/version.executable={{ .ProjectName }}'
+        -X 'go.jlucktay.dev/stack/pkg/version.version={{ .Version }}'
 
     env:
       - CGO_ENABLED=0
@@ -24,7 +24,7 @@ builds:
     # List of combinations of GOOS + GOARCH + GOARM to ignore.
     ignore:
       - goos: darwin
-        goarch: 386
+        goarch: "386"
 
     # Set the modified timestamp on the output binary, typically you would do this to ensure a build was reproducible.
     # Pass empty string to skip modifying the output.
@@ -32,11 +32,11 @@ builds:
 
 archives:
   - replacements:
+      386: i386
+      amd64: x86_64
       darwin: Darwin
       linux: Linux
       windows: Windows
-      386: i386
-      amd64: x86_64
 
 checksum:
   name_template: "checksums.txt"
@@ -45,7 +45,7 @@ snapshot:
   name_template: "{{ .Tag }}-next"
 
 brews:
-  - # Repository to push the tap to.
+  - # GitHub repository to push the formula to.
     tap:
       owner: jlucktay
       name: homebrew-tap
@@ -59,9 +59,9 @@ brews:
       https://github.com/jlucktay/stack/blob/main/README.md
 
     # Your app's homepage.
-    homepage: "https://github.com/jlucktay/stack"
+    homepage: https://github.com/jlucktay/stack
 
-    # Your app's description.
+    # Template of your app's description.
     description: |
       A support tool for use with Terraform stacks, Azure DevOps build pipelines, and GitHub projects/repos.
 
@@ -70,7 +70,10 @@ brews:
     # If set to auto, the release will not be uploaded to the homebrew tap in case there is an indicator for prerelease
     # in the tag e.g. v1.0.0-rc1
     # Default is false.
-    skip_upload: false
+    skip_upload: "false"
+
+    # SPDX identifier of your app's license.
+    license: MIT
 
     # # Packages your package depends on.
     # dependencies:
@@ -94,8 +97,15 @@ brews:
       prefix.install_metafiles
 
 changelog:
+  # Set it to true if you wish to skip the changelog generation.
+  skip: false
+
+  # Sorts the changelog by the commit's messages.
+  # Could either be 'asc', 'desc', or 'empty'.
   sort: asc
+
   filters:
+    # Commit messages matching the regexp listed here will be removed from the changelog.
     exclude:
-      - "^docs:"
-      - "^test:"
+      - "^docs"
+      - "^test"
