@@ -1,10 +1,14 @@
 # Project metadata
+.dockerignore
 .git/
 .github/
+.gitignore
 
-# Builds
+# Build and binary files
 /bin/
 /dist/
+Dockerfile
+stack
 
 # Documentation and text
 /docs/
@@ -16,5 +20,3 @@
 # Makefile things
 /out/
 /tmp/
-
-Dockerfile

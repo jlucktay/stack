@@ -1,5 +1,5 @@
 {
   "gopls": {
-    "local": "go.jlucktay.dev/stack"
+    "formatting.local": "go.jlucktay.dev/stack"
   }
 }
