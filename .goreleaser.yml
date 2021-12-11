@@ -50,6 +50,9 @@ brews:
       owner: jlucktay
       name: homebrew-tap
 
+      # Optionally a token can be provided, if it differs from the token provided to GoReleaser.
+      token: "{{ .Env.HOMEBREW_TOKEN }}"
+
     # Folder inside the repository to put the formula.
     folder: HomebrewFormula
 
