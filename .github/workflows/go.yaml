@@ -54,3 +54,36 @@ jobs:
         run: |
           brew install make
           /usr/local/opt/make/libexec/gnubin/make test
+
+  release:
+    name: Check that 'v*' tags are on the default branch, and release
+
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out ${{ github.repository }} - all history
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Confirm that the 'main' branch contains the '${{ github.ref }}' tag
+        run: >
+          git branch --all --contains '${{ github.ref }}' --no-column --format='%(refname)'
+          | grep -c '\/main$'
+
+      - name: Set up Go 1.16
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          args: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOMEBREW_TOKEN: ${{ secrets.HOMEBREW_TOKEN }}
