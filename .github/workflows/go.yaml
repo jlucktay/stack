@@ -78,7 +78,7 @@ jobs:
           /usr/local/opt/make/libexec/gnubin/make test
 
   release:
-    name: Check that 'v*' tags are on the default branch, and release
+    name: Release 'v*'' tags
 
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
 
