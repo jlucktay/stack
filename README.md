@@ -1,6 +1,6 @@
 # `stack`
 
-[![Build Status][drone-badge]][drone]
+[![Go][actions-badge]][actions]
 [![Go Report Card][goreportcard-badge]][goreportcard]
 [![PkgGoDev][pkggodev-badge]][pkggodev]
 [![Contribute][contrib-badge]][contrib]
@@ -298,10 +298,10 @@ See also the [contributing guide](.github/CONTRIBUTING.md).
 
 <!-- Badges and associated links -->
 
+[actions-badge]: https://github.com/jlucktay/stack/actions/workflows/go.yaml/badge.svg
+[actions]: https://github.com/jlucktay/stack/actions/workflows/go.yaml
 [contrib-badge]: https://img.shields.io/github/contributors/jlucktay/stack
 [contrib]: https://github.com/jlucktay/stack/tree/main/.github/CONTRIBUTING.md
-[drone-badge]: https://cloud.drone.io/api/badges/jlucktay/stack/status.svg
-[drone]: https://cloud.drone.io/jlucktay/stack
 [goreportcard-badge]: https://goreportcard.com/badge/go.jlucktay.dev/stack
 [goreportcard]: https://goreportcard.com/report/go.jlucktay.dev/stack
 [pkggodev-badge]: https://pkg.go.dev/badge/go.jlucktay.dev/stack
