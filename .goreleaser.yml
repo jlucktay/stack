@@ -12,11 +12,11 @@ builds:
     ldflags:
       # https://www.digitalocean.com/community/tutorials/using-ldflags-to-set-version-information-for-go-applications
       - >
-        -X 'go.jlucktay.dev/stack/pkg/version.buildDate={{ .Date }}'
-        -X 'go.jlucktay.dev/stack/pkg/version.builtBy=GoReleaser'
-        -X 'go.jlucktay.dev/stack/pkg/version.commit={{ .ShortCommit }}'
-        -X 'go.jlucktay.dev/stack/pkg/version.executable={{ .ProjectName }}'
-        -X 'go.jlucktay.dev/stack/pkg/version.version={{ .Version }}'
+        -X 'go.jlucktay.dev/version.buildDate={{ .Date }}'
+        -X 'go.jlucktay.dev/version.builtBy=GoReleaser'
+        -X 'go.jlucktay.dev/version.commit={{ .ShortCommit }}'
+        -X 'go.jlucktay.dev/version.executable={{ .ProjectName }}'
+        -X 'go.jlucktay.dev/version.version={{ .Version }}'
 
     env:
       - CGO_ENABLED=0
