@@ -13,7 +13,7 @@ require (
 	github.com/matryer/is v1.4.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.9.1
-	github.com/spf13/cobra v1.3.0
+	github.com/spf13/cobra v1.6.0
 	github.com/spf13/viper v1.10.1
 	go.jlucktay.dev/version v0.2.0
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
